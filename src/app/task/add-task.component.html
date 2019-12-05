@@ -1,0 +1,29 @@
+
+<div class="col-md-6">        
+        <form [formGroup]="addForm" (ngSubmit)="onSubmit()">                   
+            <div class="form-group">
+                <label for="task" style="font-size: large;">Task Name:</label>
+                <input type="text" formControlName="task" placeholder="Task Name" name="task" class="form-control" id="task" style="font-size: large;">                
+            </div>        
+            <div class="form-group">
+                <label for="priority" style="font-size: large;">Priority:</label>
+                <input type="text" formControlName="priority" placeholder="Priority" name="priority" class="form-control" id="priority" style="font-size: large;">
+            </div>
+            <div class="form-group">
+                <label for="parentTask" style="font-size: large;">Parent Task:</label>
+                <input type="text" formControlName="parentTask" placeholder="Parent Task" name="parentTask" class="form-control" id="parentTask" style="font-size: large;">
+            </div>
+            <div class="form-group">
+                <label for="startDate" style="font-size: large;">Start Date:</label>
+                <input type="text" formControlName="startDate" placeholder="Start Date" name="startDate" class="form-control" id="startDate" style="font-size: large;">
+            </div>
+            <div class="form-group">
+                <label for="endDate" style="font-size: large;">End Date:</label>
+                <input type="text" formControlName="endDate" placeholder="End Date" name="endDate" class="form-control" id="endDate" style="font-size: large;">
+            </div>
+            <div class="btn-group" role="group" aria-label="...">
+                <button class="btn btn-default">Add Task</button>
+                <button class="btn btn-default" (click)='onReset()'>Reset</button>
+            </div>  
+        </form>
+</div>

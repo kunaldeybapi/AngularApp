@@ -1,0 +1,14 @@
+<div>
+    <nav class="navbar navbar-expand navbar-light bg-light">
+      <div><a class="navbar-brand"><h2>{{pageTitle}}</h2></a></div>
+      </nav>
+</div>
+<div>
+    <ul class="nav nav-pills">
+        <li><a class="navlink" [routerLink]="['/addTask']"><h4>Add Task</h4></a></li>          
+        <li><a class="navlink" [routerLink]="['/tasks']"><h4>View Task</h4></a></li>    
+      </ul>
+</div>
+<div>
+    <router-outlet></router-outlet>
+</div>

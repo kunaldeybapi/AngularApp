@@ -1,0 +1,17 @@
+.headerElements{
+    color: teal!important;
+    font-family: 'Times New Roman', Times, serif!important;    
+    font-size: 25px!important;
+}
+.searchfields{
+    color:blue;
+    font-family: 'Times New Roman', Times, serif;
+    font-style: normal;
+    font-size: 20px;
+}
+
+.dataElements{
+    font-family: 'Times New Roman', Times, serif;
+    font-style: normal;
+    font-size: 18px;
+}

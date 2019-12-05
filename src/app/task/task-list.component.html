@@ -1,0 +1,46 @@
+<div>    
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2 searchfields">Task: </div>
+            <div class="col-md-4"><input type="text" [(ngModel)]='taskFilter'></div>            
+            <div class="col-md-2 searchfields">Parent Task: </div>
+            <div class="col-md-4"><input type="text" [(ngModel)]='parentTaskFilter'></div>
+        </div>
+        <br>
+        <div class="row">
+                <div class="col-md-1 searchfields">Priority From: </div>
+                <div class="col-md-2"><input type="number" [(ngModel)]='priorityFromFilter'></div>
+                <div class="col-md-1 searchfields">Priority To: </div>
+                <div class="col-md-2"><input type="number"  [(ngModel)]='priorityToFilter'></div>
+                <div class="col-md-1 searchfields">Start Date: </div>
+                <div class="col-md-2"><input type="text" [(ngModel)]='startDateFilter'></div>                
+                <div class="col-md-1 searchfields">End Date: </div>
+                <div class="col-md-2"><input type="text" [(ngModel)]='endDateFilter'></div>
+        </div>    
+    </div>
+    <div style="height: 30px;"></div>
+    <div class="table-responsive">    
+        <table class="table" *ngIf='tasks && tasks.length'>            
+            <tbody *ngFor='let task of filterTasks'>
+                    <tr>
+                        <td class="headerElements">Task</td>
+                        <td class="headerElements">Parent</td>                
+                        <td class="headerElements">Start</td>
+                        <td class="headerElements">End</td>
+                        <td class="headerElements">Priority</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="dataElements">{{task.task}}</td>
+                        <td class="dataElements">{{(task.parentTask == "" || task.parentTask == null) ? "This task has NO parent task": task.parentTask}}</td>                            
+                        <td class="dataElements">{{task.startDate}}</td>
+                        <td class="dataElements">{{task.endDate}}</td>
+                        <td class="dataElements">{{task.priority}}</td>
+                        <td><button class="btn btn-primary dataElements" [disabled]='task.isTaskComplete' (click)="editTask(task)">Edit</button></td>
+                        <td><button class="btn btn-primary dataElements" [disabled]='task.isTaskComplete' (click)='endTask(task)'>End Task</button></td>
+                    </tr>
+            </tbody>            
+        </table>
+    </div>
+</div>
