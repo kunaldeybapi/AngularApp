@@ -36,8 +36,9 @@ export class TaskService{
         return this.http.post(this.taskURL, task);
     }
 
-    updateTask(task: ITask) {
-        return this.http.post(this.updateTaskURL, task);
+    updateTask(id:number,task: ITask) {  
+        this.singleTaskURL=this.taskURL+"/"+id;      
+        return this.http.post(this.singleTaskURL, task);
     }
 
     completeTask(task: ITask){        

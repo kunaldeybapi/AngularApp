@@ -1,31 +1,31 @@
 <div class="col-md-6">    
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
         <div class="form-group">            
-            <input type="hidden" formControlName="taskID" placeholder="Task ID" name="taskID" class="form-control" id="taskID">
+            <input type="hidden" formControlName="Task_ID" placeholder="Task ID" name="Task_ID" class="form-control" id="Task_ID">
           </div>
       <div class="form-group">
-        <label for="task">Task Name::</label>
-        <input type="text" formControlName="task" placeholder="Task Name" name="task" class="form-control" id="task">
+        <label for="Task1">Task Name::</label>
+        <input type="text" formControlName="Task1" placeholder="Task Name" name="Task1" class="form-control" id="Task1">
       </div>        
       <div class="form-group">
-              <label for="priority">Priority:</label>
+              <label for="Priority">Priority:</label>
               <div>
                     <span>0</span>
                     <span style="float: right!important;">30</span>
                 </div>              
-              <input type="range" min="1" max="30" step="1" formControlName="priority" placeholder="Priority" name="priority" class="form-control" id="priority">
+              <input type="range" min="1" max="30" step="1" formControlName="Priority" placeholder="Priority" name="Priority" class="form-control" id="Priority">
       </div>
       <div class="form-group">
-              <label for="parentTask">Parent Task:</label>
-              <input type="text" formControlName="parentTask" placeholder="Parent Task" name="parentTask" class="form-control" id="parentTask">
+              <label for="Parent_ID">Parent Task:</label>
+              <input type="text" formControlName="Parent_ID" placeholder="Parent Task" name="Parent_ID" class="form-control" id="Parent_ID">
       </div>
       <div class="form-group">
-              <label for="startDate">Start Date:</label>
-              <input type="text" formControlName="startDate" placeholder="Start Date" name="startDate" class="form-control" id="startDate">
+              <label for="Start_Date">Start Date:</label>
+              <input type="text" formControlName="Start_Date" placeholder="Start Date" name="Start_Date" class="form-control" id="Start_Date">
       </div>
       <div class="form-group">
-              <label for="endDate">End Date:</label>
-              <input type="text" formControlName="endDate" placeholder="End Date" name="endDate" class="form-control" id="endDate">
+              <label for="End_Date">End Date:</label>
+              <input type="text" formControlName="End_Date" placeholder="End Date" name="End_Date" class="form-control" id="End_Date">
       </div>
       <div class="form-group">            
           <input type="hidden" formControlName="isTaskComplete" placeholder="isTaskComplete" name="isTaskComplete" class="form-control" id="isTaskComplete">

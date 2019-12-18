@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ITask } from './task'
-import {ActivatedRoute, Router} from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { TaskService } from './task.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -27,12 +27,12 @@ export class TaskDetailsComponent implements OnInit {
     }
     
     this.editForm = this.formBuilder.group({
-      taskID: [''],
-      task: ['', Validators.required],
-      priority: ['', Validators.required],
-      parentTask: [''],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      Task_ID: [''],
+      Task1: ['', Validators.required],
+      Priority: ['', Validators.required],
+      Parent_ID: [''],
+      Start_Date: ['', Validators.required],
+      End_Date: ['', Validators.required],
       isTaskComplete: ['', Validators.required]
     });
   }
@@ -45,7 +45,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    this.taskservice.updateTask(this.editForm.value)
+    this.taskservice.updateTask(this.editForm.get('Task_ID').value, this.editForm.value)
       .pipe(first())
       .subscribe(
         data => {
