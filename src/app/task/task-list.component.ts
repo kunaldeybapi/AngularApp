@@ -90,35 +90,35 @@ export class TaskComponent implements OnInit{
 
     performTaskFilter(filterBy: string): ITask[] {
         filterBy=filterBy.toLocaleLowerCase();
-        return this.tasks.filter((tasks: ITask) => tasks.task.toLocaleLowerCase().indexOf(filterBy)!== -1);
+        return this.tasks.filter((tasks: ITask) => tasks.Task1.toLocaleLowerCase().indexOf(filterBy)!== -1);
     }
 
     performParentTaskFilter(filterBy: string): ITask[] {
         filterBy=filterBy.toLocaleLowerCase();
-        return this.tasks.filter((tasks: ITask) => tasks.parentTask.toLocaleLowerCase().indexOf(filterBy)!== -1);
+        return this.tasks.filter((tasks: ITask) => tasks.Parent_ID.toLocaleLowerCase().indexOf(filterBy)!== -1);
     }
 
     performPriorityFromFiler(filterBy: number): ITask[] {        
-        return this.tasks.filter((tasks:ITask)=> tasks.priority >= filterBy)
+        return this.tasks.filter((tasks:ITask)=> tasks.Priority >= filterBy)
     }
 
     performPriorityToFilter(filterBy: number): ITask[]{
-        return this.tasks.filter((tasks:ITask)=> tasks.priority <= filterBy)
+        return this.tasks.filter((tasks:ITask)=> tasks.Priority <= filterBy)
 
     }
 
     performStartDateFilter(filterBy: string): ITask[] {        
-        return this.tasks.filter((tasks: ITask) => tasks.startDate >= filterBy);
+        return this.tasks.filter((tasks: ITask) => tasks.Start_Date >= filterBy);
     }
 
     performEndDateFilter(filterBy: string): ITask[] {
-        return this.tasks.filter((tasks: ITask) => tasks.endDate >= filterBy);
+        return this.tasks.filter((tasks: ITask) => tasks.End_Date >= filterBy);
     }
 
     editTask(task: ITask): void {
         localStorage.removeItem("editTaskId");
-        localStorage.setItem("editTaskId", task.taskID.toString());
-        this.router.navigate(['/tasks',task.taskID]);
+        localStorage.setItem("editTaskId", task.Task_ID.toString());
+        this.router.navigate(['/tasks',task.Task_ID]);
     }
 
     endTask(task: ITask){           

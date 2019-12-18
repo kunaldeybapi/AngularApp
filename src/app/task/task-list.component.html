@@ -32,11 +32,11 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td class="dataElements">{{task.task}}</td>
-                        <td class="dataElements">{{(task.parentTask == "" || task.parentTask == null) ? "This task has NO parent task": task.parentTask}}</td>                            
-                        <td class="dataElements">{{task.startDate}}</td>
-                        <td class="dataElements">{{task.endDate}}</td>
-                        <td class="dataElements">{{task.priority}}</td>
+                        <td class="dataElements">{{task.Task1}}</td>
+                        <td class="dataElements">{{(task.Parent_ID == "" || task.Parent_ID == null) ? "This task has NO parent task": task.Parent_ID}}</td>                            
+                        <td class="dataElements">{{task.Start_Date}}</td>
+                        <td class="dataElements">{{task.End_Date}}</td>
+                        <td class="dataElements">{{task.Priority}}</td>
                         <td><button class="btn btn-primary dataElements" [disabled]='task.isTaskComplete' (click)="editTask(task)">Edit</button></td>
                         <td><button class="btn btn-primary dataElements" [disabled]='task.isTaskComplete' (click)='endTask(task)'>End Task</button></td>
                     </tr>

@@ -1,9 +1,9 @@
 export interface ITask{
-    taskID:number;
-    task:string;
-    parentTask:string;
-    startDate:string;
-    endDate:string;
-    priority:number;
+    Task_ID:number;
+    Task1:string;
+    Parent_ID:string;
+    Start_Date:string;
+    End_Date:string;
+    Priority:number;
     isTaskComplete:boolean;
 }
