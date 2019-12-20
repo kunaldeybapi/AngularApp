@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ITask } from './task';
+
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
@@ -12,7 +13,9 @@ export class TaskService{
     private taskURL='http://localhost/webapi/api/task';
     private updateTaskURL='http://localhost/webapi/api/UpdateTask';
     private completeTaskURL='http://localhost/webapi/api/CompleteTask';
-    private singleTaskURL='';    
+    
+    private singleTaskURL='';
+    
 
     constructor(private http:HttpClient){}
 
@@ -32,7 +35,7 @@ export class TaskService{
         );        
     }
 
-    createTask(task: ITask) {
+    createTask(task: ITask) {        
         return this.http.post(this.taskURL, task);
     }
 

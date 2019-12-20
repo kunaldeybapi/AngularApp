@@ -3,12 +3,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { TaskService } from './task.service';
 
+
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.css']
 })
 export class AddTaskComponent implements OnInit {  
+  
   errorMessage:string='';
 
   constructor(private router: Router, private taskService: TaskService, private route: ActivatedRoute,private formBuilder: FormBuilder) { }
