@@ -17,22 +17,22 @@ export class AddTaskComponent implements OnInit {
 
   ngOnInit() {
     this.addForm = this.formBuilder.group({            
-      task: ['', Validators.required],
-      priority: ['', Validators.required],
-      parentTask: [''],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required]
+      Task1: ['', Validators.required],
+      Priority: ['', Validators.required],
+      Parent_ID: [''],
+      Start_Date: ['', Validators.required],
+      End_Date: ['', Validators.required]
     });    
   }  
 
   onSubmit() {
-    const taskName=this.addForm.get('task').value;
-    const priority=this.addForm.get('priority').value;    
-    const startDate=this.addForm.get('startDate').value;
-    const endDate=this.addForm.get('endDate').value;
+    const taskName=this.addForm.get('Task1').value;
+    const priority=this.addForm.get('Priority').value;    
+    const startDate=this.addForm.get('Start_Date').value;
+    const endDate=this.addForm.get('End_Date').value;
 
     if(taskName== "" || priority == "" || startDate == "" || endDate == ""){
-      alert('Please provide all the mandatory deatils: task name, priority, start date and end date to add a new task!');
+      alert('Please provide all the mandatory deatils: Task name, Priority, Start Date and End Date to add a new task!');
     }
     else{
       this.taskService.createTask(this.addForm.value)
