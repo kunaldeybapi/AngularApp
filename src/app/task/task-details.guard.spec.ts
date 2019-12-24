@@ -9,7 +9,7 @@ describe('TaskDetailsGuard', () => {
     });
   });
 
-  it('should ...', inject([TaskDetailsGuard], (guard: TaskDetailsGuard) => {
-    expect(guard).toBeTruthy();
-  }));
+  // it('should ...', inject([TaskDetailsGuard], (guard: TaskDetailsGuard) => {
+  //   expect(guard).toBeTruthy();
+  // }));
 });
