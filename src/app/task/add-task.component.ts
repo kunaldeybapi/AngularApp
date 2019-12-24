@@ -27,7 +27,7 @@ export class AddTaskComponent implements OnInit {
     });    
   }  
 
-  onSubmit() {
+  onSubmit():void {
     const taskName=this.addForm.get('Task1').value;
     const priority=this.addForm.get('Priority').value;    
     const startDate=this.addForm.get('Start_Date').value;
@@ -45,6 +45,6 @@ export class AddTaskComponent implements OnInit {
   }  
 
   onReset():void{
-    this.addForm.reset();
+    this.addForm.reset({Task1:'',Parent_ID:'',Start_Date:'',End_Date:''});
   }
 }
