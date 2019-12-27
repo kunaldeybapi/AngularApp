@@ -10,6 +10,7 @@ import { TaskDetailsComponent } from './task/task-details.component';
 import { RouterModule } from '@angular/router';
 import { TaskDetailsGuard } from './task/task-details.guard';
 import { AddTaskComponent } from './task/add-task.component';
+import { UserComponent } from './user/user.component';
 
 
 @NgModule({
@@ -17,7 +18,7 @@ import { AddTaskComponent } from './task/add-task.component';
     AppComponent,
     TaskComponent,
     TaskDetailsComponent,    
-    AddTaskComponent
+    AddTaskComponent, UserComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +33,8 @@ import { AddTaskComponent } from './task/add-task.component';
         path:'tasks/:id',
         canActivate: [TaskDetailsGuard],
         component: TaskDetailsComponent
-      },      
+      },
+      {path:'user',component:UserComponent},      
       {path:'',redirectTo:'tasks',pathMatch:'full'},
       {path:'**',redirectTo:'tasks',pathMatch:'full'}
     ],{useHash: true})
