@@ -1,4 +1,4 @@
-<div class="col-md-6">    
+<div class="col-md-12">    
     <form [formGroup]="addUserForm" (ngSubmit)="onSubmit()">        
       <div class="form-group">
         <label for="FirstName">First Name:</label>
@@ -13,11 +13,32 @@
         <input type="text" formControlName="Employee_ID" placeholder="Employee ID" name="Employee_ID" class="form-control" id="Employee_ID">
       </div>      
         <div class="btn-group" role="group"  aria-label="...">
-            <button class="btn btn-default">Add</button>                        
+            <button class="btn btn-default" id="AddorUpdate">Add</button>                        
         </div>      
     </form>
     <br>
     <div>
         <button class="btn btn-default" (click)='onReset()'>Reset</button>
     </div>
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered" *ngIf='users'>
+          <thead>
+              <tr>
+                  <th><input type="text" placeholder="Search" [(ngModel)]='userNameFilter'></th>
+                  <th>Sort</th>
+                  <th><button class="btn btn-default">First Name</button></th>
+                  <th><button class="btn btn-default">Last Name</button></th>
+                  <th><button class="btn btn-default">ID</button></th>
+              </tr>                                
+          </thead>
+          <tbody *ngFor='let user of filterUsers'>
+            <tr><td>{{user.FirstName}}</td><td><button class="btn btn-default" (click)="editUser(user.Employee_ID)">Edit</button></td></tr>
+            <tr><td>{{user.LastName}}</td><td><button class="btn btn-default" (click)="deleteUser(user.Employee_ID)">Delete</button></td></tr>
+            <tr><td>{{user.Employee_ID}}</td></tr> 
+          </tbody>
+      </table>
+    </div>   
 </div>
+
+

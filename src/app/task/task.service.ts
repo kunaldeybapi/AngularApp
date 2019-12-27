@@ -10,8 +10,7 @@ import { catchError, tap, map } from 'rxjs/operators';
     providedIn:'root'
 })
 export class TaskService{
-    private taskURL='http://localhost/webapi/api/task';
-    private updateTaskURL='http://localhost/webapi/api/UpdateTask';
+    private taskURL='http://localhost/webapi/api/task';    
     private completeTaskURL='http://localhost/webapi/api/CompleteTask';
     
     private singleTaskURL='';
@@ -21,7 +20,7 @@ export class TaskService{
 
     getTasks():Observable<ITask[]>{
         return this.http.get<ITask[]>(this.taskURL).pipe(
-            tap(data=> console.log('All: '+JSON.stringify(data))),
+            tap(data=> console.log('All Task data: '+JSON.stringify(data))),
             catchError(this.handleError)
         );
     }
