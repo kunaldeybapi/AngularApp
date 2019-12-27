@@ -10,7 +10,6 @@ import { TaskService } from './task.service';
   styleUrls: ['./add-task.component.css']
 })
 export class AddTaskComponent implements OnInit {  
-  
   errorMessage:string='';
 
   constructor(private router: Router, private taskService: TaskService, private route: ActivatedRoute,private formBuilder: FormBuilder) { }
