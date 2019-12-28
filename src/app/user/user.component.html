@@ -11,10 +11,19 @@
       <div class="form-group">
         <label for="Employee_ID">Employee ID:</label>
         <input type="text" formControlName="Employee_ID" placeholder="Employee ID" name="Employee_ID" class="form-control" id="Employee_ID">
+      </div>
+      <div class="form-group">            
+        <input type="hidden" formControlName="User_ID" name="User_ID" class="form-control" id="User_ID">
+      </div>
+      <div class="form-group">            
+        <input type="hidden" formControlName="Project_ID" name="Project_ID" class="form-control" id="Project_ID">
+      </div>
+      <div class="form-group">            
+        <input type="hidden" formControlName="Task_ID" name="Task_ID" class="form-control" id="Task_ID">
       </div>      
-        <div class="btn-group" role="group"  aria-label="...">
-            <button class="btn btn-default" id="AddorUpdate">Add</button>                        
-        </div>      
+      <div class="btn-group" role="group"  aria-label="...">
+          <button class="btn btn-default" id="AddorUpdate">Add</button>                        
+      </div>      
     </form>
     <br>
     <div>
@@ -33,9 +42,10 @@
               </tr>                                
           </thead>
           <tbody *ngFor='let user of filterUsers'>
-            <tr><td>{{user.FirstName}}</td><td><button class="btn btn-default" (click)="editUser(user.Employee_ID)">Edit</button></td></tr>
-            <tr><td>{{user.LastName}}</td><td><button class="btn btn-default" (click)="deleteUser(user.Employee_ID)">Delete</button></td></tr>
-            <tr><td>{{user.Employee_ID}}</td></tr> 
+            <tr><td>{{user.FirstName}}</td><td><button class="btn btn-default" (click)="editUser(user.User_ID)">Edit</button></td></tr>
+            <tr><td>{{user.LastName}}</td><td><button class="btn btn-default" (click)="deleteUser(user.User_ID)">Delete</button></td></tr>
+            <tr><td>{{user.Employee_ID}}</td></tr>
+            <tr><br></tr>          
           </tbody>
       </table>
     </div>   

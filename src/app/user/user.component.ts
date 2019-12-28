@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UserService} from './user.service'
 import { IUser } from './user';
+import { stringify } from 'querystring';
 
 
 @Component({
@@ -27,10 +28,13 @@ export class UserComponent implements OnInit {
       error: err=>(this.errorMessage=err)
   });
 
-    this.addUserForm = this.formBuilder.group({            
+    this.addUserForm = this.formBuilder.group({       
+      User_ID: ['', ],     
       FirstName: ['', Validators.required],
       LastName: ['', Validators.required],
-      Employee_ID: ['',Validators.required]
+      Employee_ID: ['',Validators.required],
+      Project_ID: [''],
+      Task_ID: ['']
     });
   }
 
@@ -53,11 +57,18 @@ export class UserComponent implements OnInit {
       alert('Please fill in all the mandatory details: First name, Last name & Employee ID to add a new user!');
     }
     else{
-      this.userService.createUser(this.addUserForm.value)
-      .subscribe( data => {
-        //this.router.navigate(['/user']);
-        window.location.reload();
+      var action="";
+      action=document.getElementById('AddorUpdate').innerHTML.toLocaleLowerCase();
+      if(action=="add"){
+        this.userService.createUser(this.addUserForm.value).subscribe( data => {
+          window.location.reload();
       });
+      }
+      if(action=="update"){
+        this.userService.updateUser(this.addUserForm.get('User_ID').value,this.addUserForm.value).subscribe( data => {
+          window.location.reload();
+      });      
+      }      
     }    
   }
 
@@ -66,15 +77,17 @@ export class UserComponent implements OnInit {
     return this.users.filter((users: IUser) => users.FirstName.toLocaleLowerCase().indexOf(filterBy)!== -1);
   }
 
-  editUser(userID: number){
+  editUser(userID: number){   
     this.userService.getUserDetail(userID).subscribe(
       data => {
         this.addUserForm.setValue(data);
     });
+    document.getElementById('AddorUpdate').innerHTML="Update";
 }
 
   onReset():void{
     this.addUserForm.reset({FirstName:'',LastName:'',Employee_ID:''});
+    document.getElementById('AddorUpdate').innerHTML="Add";
   }
 
 }
