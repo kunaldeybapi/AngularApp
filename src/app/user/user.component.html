@@ -43,7 +43,7 @@
           </thead>
           <tbody *ngFor='let user of filterUsers'>
             <tr><td>{{user.FirstName}}</td><td><button class="btn btn-default" (click)="editUser(user.User_ID)">Edit</button></td></tr>
-            <tr><td>{{user.LastName}}</td><td><button class="btn btn-default" (click)="deleteUser(user.User_ID)">Delete</button></td></tr>
+            <tr><td>{{user.LastName}}</td><td><button class="btn btn-default" (click)="deleteUser(user)">Delete</button></td></tr>
             <tr><td>{{user.Employee_ID}}</td></tr>
             <tr><br></tr>          
           </tbody>

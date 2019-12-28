@@ -11,7 +11,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 
 export class UserService{
     private addUserURL='http://localhost/webapi/api/User';    
-    private getSingleUserURL='http://localhost/webapi/api/GetUsers';
+    private removeUserURL='http://localhost/webapi/api/RemoveUser';
     private singleUserURL='';
 
     constructor(private http:HttpClient){}
@@ -26,7 +26,7 @@ export class UserService{
     getUserDetail(id:number): Observable<IUser | undefined>{
         this.singleUserURL=this.addUserURL+"/"+id;       
         return this.http.get<IUser>(this.singleUserURL).pipe(
-            tap(data=> console.log('Single USer details: '+JSON.stringify(data),'User URI: '+ JSON.stringify(this.getSingleUserURL))),
+            tap(data=> console.log('Single User details: '+JSON.stringify(data),'User URI: '+ JSON.stringify(this.singleUserURL))),
             catchError(this.handleError),            
         );        
     }
@@ -38,6 +38,10 @@ export class UserService{
     updateUser(id:number,user: IUser) {  
         this.singleUserURL=this.addUserURL+"/"+id;      
         return this.http.post(this.singleUserURL, user);
+    }
+
+    deleteUser(user: IUser){        
+        return this.http.post(this.removeUserURL, user);
     }
 
     handleError(err:HttpErrorResponse){

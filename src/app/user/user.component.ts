@@ -85,6 +85,13 @@ export class UserComponent implements OnInit {
     document.getElementById('AddorUpdate').innerHTML="Update";
 }
 
+deleteUser(user:IUser){   
+  return this.userService.deleteUser(user).pipe().subscribe(
+    data => {
+        window.location.reload();
+      });
+}
+
   onReset():void{
     this.addUserForm.reset({FirstName:'',LastName:'',Employee_ID:''});
     document.getElementById('AddorUpdate').innerHTML="Add";
