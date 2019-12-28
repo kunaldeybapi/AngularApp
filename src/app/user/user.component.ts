@@ -92,6 +92,8 @@ deleteUser(user:IUser){
       });
 }
 
+
+
   onReset():void{
     this.addUserForm.reset({FirstName:'',LastName:'',Employee_ID:''});
     document.getElementById('AddorUpdate').innerHTML="Add";
