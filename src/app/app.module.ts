@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { TaskDetailsGuard } from './task/task-details.guard';
 import { AddTaskComponent } from './task/add-task.component';
 import { UserComponent } from './user/user.component';
+import { ProjectComponent } from './project/project.component';
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import { UserComponent } from './user/user.component';
     AppComponent,
     TaskComponent,
     TaskDetailsComponent,    
-    AddTaskComponent, UserComponent
+    AddTaskComponent, UserComponent, ProjectComponent
   ],
   imports: [
     BrowserModule,

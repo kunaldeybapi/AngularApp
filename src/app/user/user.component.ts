@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UserService} from './user.service'
 import { IUser } from './user';
 import { stringify } from 'querystring';
+import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -11,7 +12,8 @@ import { stringify } from 'querystring';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit {  
+export class UserComponent implements OnInit {
+  selectedUserID:number; 
   errorMessage:string='';
   addUserForm:FormGroup;
   filterUsers:IUser[];
@@ -28,13 +30,10 @@ export class UserComponent implements OnInit {
       error: err=>(this.errorMessage=err)
   });
 
-    this.addUserForm = this.formBuilder.group({
-      User_ID:[''],         
+    this.addUserForm = this.formBuilder.group({               
       FirstName: ['', Validators.required],
       LastName: ['', Validators.required],
-      Employee_ID: ['',Validators.required],
-      Project_ID:[''],
-      Task_ID:['']
+      Employee_ID: ['',Validators.required]      
     });
   }
 
@@ -56,15 +55,21 @@ export class UserComponent implements OnInit {
     if(firstName== "" || lastName == "" || employee_ID == ""){
       alert('Please fill in all the mandatory details: First name, Last name & Employee ID to add a new user!');
     }
-    else{   
-        this.userService.createUser(this.addUserForm.value).subscribe( data => {
+    else{
+      var action="";
+      action=document.getElementById('AddorUpdate').innerHTML.toLocaleLowerCase();
+      if(action=="add"){
+          this.userService.createUser(this.addUserForm.value).subscribe( data => {
           window.location.reload();
-      });   
-      //   this.userService.updateUser(this.addUserForm.get('User_ID').value,this.addUserForm.value).subscribe( data => {
-      //     window.location.reload();
-      // });          
-    }    
+      });
+    }
+      if(action=="update"){
+          this.userService.updateUser(this.selectedUserID,this.addUserForm.value).pipe(first()).subscribe( data => {
+          window.location.reload();
+      })
+    }                
   }
+}
 
   performUserNameFilter(filterBy: string): IUser[] {
     filterBy=filterBy.toLocaleLowerCase();
@@ -74,9 +79,12 @@ export class UserComponent implements OnInit {
   editUser(userID: number){   
     this.userService.getUserDetail(userID).subscribe(
       data => {
-        this.addUserForm.setValue(data);
+        this.addUserForm.controls['FirstName'].setValue(data.FirstName);
+        this.addUserForm.controls['LastName'].setValue(data.LastName);
+        this.addUserForm.controls['Employee_ID'].setValue(data.Employee_ID);
+        this.selectedUserID=userID;       
     });
-    //document.getElementById('AddorUpdate').innerHTML="Update";
+    document.getElementById('AddorUpdate').innerHTML="Update";
   }
 
   deleteUser(user:IUser){   
@@ -88,7 +96,7 @@ export class UserComponent implements OnInit {
 
   onReset():void{
     this.addUserForm.reset({FirstName:'',LastName:'',Employee_ID:''});
-    //document.getElementById('AddorUpdate').innerHTML="Add";
+    document.getElementById('AddorUpdate').innerHTML="Add";
   }
 
 }

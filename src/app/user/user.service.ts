@@ -10,7 +10,8 @@ import { catchError, tap, map } from 'rxjs/operators';
 })
 
 export class UserService{
-    private addUserURL='http://localhost/webapi/api/users';       
+    private addUserURL='http://localhost/webapi/api/users';
+    private updateUserURL='http://localhost/webapi/api/UpdateUser';      
     private removeUserURL='http://localhost/webapi/api/RemoveUser';
     private singleUserURL='';
 
@@ -36,7 +37,7 @@ export class UserService{
     }
 
     updateUser(id:number,user: IUser) {  
-        this.singleUserURL=this.addUserURL+"/"+id;      
+        this.singleUserURL=this.updateUserURL+"/"+id;      
         return this.http.post(this.singleUserURL, user);
     }
 
