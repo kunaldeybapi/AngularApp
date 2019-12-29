@@ -28,13 +28,13 @@ export class UserComponent implements OnInit {
       error: err=>(this.errorMessage=err)
   });
 
-    this.addUserForm = this.formBuilder.group({       
-      User_ID: ['', ],     
+    this.addUserForm = this.formBuilder.group({
+      User_ID:[''],         
       FirstName: ['', Validators.required],
       LastName: ['', Validators.required],
       Employee_ID: ['',Validators.required],
-      Project_ID: [''],
-      Task_ID: ['']
+      Project_ID:[''],
+      Task_ID:['']
     });
   }
 
@@ -56,19 +56,13 @@ export class UserComponent implements OnInit {
     if(firstName== "" || lastName == "" || employee_ID == ""){
       alert('Please fill in all the mandatory details: First name, Last name & Employee ID to add a new user!');
     }
-    else{
-      var action="";
-      action=document.getElementById('AddorUpdate').innerHTML.toLocaleLowerCase();
-      if(action=="add"){
+    else{   
         this.userService.createUser(this.addUserForm.value).subscribe( data => {
           window.location.reload();
-      });
-      }
-      if(action=="update"){
-        this.userService.updateUser(this.addUserForm.get('User_ID').value,this.addUserForm.value).subscribe( data => {
-          window.location.reload();
-      });      
-      }      
+      });   
+      //   this.userService.updateUser(this.addUserForm.get('User_ID').value,this.addUserForm.value).subscribe( data => {
+      //     window.location.reload();
+      // });          
     }    
   }
 
@@ -82,21 +76,19 @@ export class UserComponent implements OnInit {
       data => {
         this.addUserForm.setValue(data);
     });
-    document.getElementById('AddorUpdate').innerHTML="Update";
-}
+    //document.getElementById('AddorUpdate').innerHTML="Update";
+  }
 
-deleteUser(user:IUser){   
-  return this.userService.deleteUser(user).pipe().subscribe(
-    data => {
-        window.location.reload();
-      });
-}
-
-
+  deleteUser(user:IUser){   
+    return this.userService.deleteUser(user).pipe().subscribe(
+      data => {
+          window.location.reload();
+        });
+  }
 
   onReset():void{
     this.addUserForm.reset({FirstName:'',LastName:'',Employee_ID:''});
-    document.getElementById('AddorUpdate').innerHTML="Add";
+    //document.getElementById('AddorUpdate').innerHTML="Add";
   }
 
 }

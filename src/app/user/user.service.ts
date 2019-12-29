@@ -10,7 +10,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 })
 
 export class UserService{
-    private addUserURL='http://localhost/webapi/api/User';    
+    private addUserURL='http://localhost/webapi/api/users';       
     private removeUserURL='http://localhost/webapi/api/RemoveUser';
     private singleUserURL='';
 
