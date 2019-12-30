@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectService } from './project.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ThrowStmt } from '@angular/compiler';
+import { formatDate } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-project',
@@ -10,6 +12,8 @@ import { ThrowStmt } from '@angular/compiler';
   styleUrls: ['./project.component.css']
 })
 export class ProjectComponent implements OnInit {
+  currentDate:string;
+  date:Date;
   datesDisabled:boolean=true;
   errorMessage:string='';
   addProjectForm:FormGroup;
@@ -27,10 +31,15 @@ export class ProjectComponent implements OnInit {
   }
 
   onSubmit():void {
-    const projectName=this.addProjectForm.get('Project1').value;   
+    const projectName=this.addProjectForm.get('Project1').value;
+    const startDate=this.addProjectForm.get('Start_Date').value;
+    const endDate=this.addProjectForm.get('End_Date').value;
 
     if(projectName== ""){
-      alert('Please fill in all the mandatory details: First name, Last name & Employee ID to add a new user!');
+      alert('Please fill in all the mandatory field(s): Project to add a new project!');
+    }
+    else if(startDate>endDate){
+      alert('End date cannot be before Start date!');
     }
     else{
       var action="";
@@ -51,12 +60,25 @@ export class ProjectComponent implements OnInit {
   EnableDates():void{
     this.datesDisabled=!this.datesDisabled;        
     if(this.datesDisabled){
-      document.getElementById('Start_Date').setAttribute('disabled', 'false');
-      document.getElementById('End_Date').setAttribute('disabled', 'false');
+      this.addProjectForm.get('Start_Date').disable();
+      this.addProjectForm.get('End_Date').disable();
+      this.addProjectForm.controls['Start_Date'].setValue('');
+      this.addProjectForm.controls['End_Date'].setValue('');
     }
     else{
-      document.getElementById('Start_Date').removeAttribute('disabled');
-      document.getElementById('End_Date').removeAttribute('disabled');
+      this.currentDate=formatDate(new Date(),'yyyy-MM-dd','en');
+      this.addProjectForm.get('Start_Date').enable();
+      this.addProjectForm.controls['Start_Date'].patchValue(this.currentDate);
+      
+      this.date=new Date();
+      this.date.setDate(this.date.getDate()+1);      
+      this.currentDate=formatDate(this.date,'yyyy-MM-dd','en');      
+      this.addProjectForm.get('End_Date').enable();
+      this.addProjectForm.controls['End_Date'].patchValue(this.currentDate);
     }    
+  }
+
+  Reset():void{
+    window.location.reload();
   }
 }
