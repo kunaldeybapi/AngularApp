@@ -35,7 +35,8 @@ import { ProjectComponent } from './project/project.component';
         canActivate: [TaskDetailsGuard],
         component: TaskDetailsComponent
       },
-      {path:'user',component:UserComponent},      
+      {path:'user',component:UserComponent},
+      {path:'project',component:ProjectComponent},
       {path:'',redirectTo:'tasks',pathMatch:'full'},
       {path:'**',redirectTo:'tasks',pathMatch:'full'}
     ],{useHash: true})

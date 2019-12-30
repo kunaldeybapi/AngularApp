@@ -1,1 +1,57 @@
-<p>project works!</p>
+<div class="col-md-6">    
+    <form [formGroup]="addProjectForm" (ngSubmit)="onSubmit()">                  
+      <div class="form-group">
+        <ul>
+          <li style="list-style-type: none;"><label for="Project">Project:</label></li>
+          <li style="list-style-type: none;"><input type="text" formControlName="Project1" placeholder="Project" name="Project1" class="form-control" id="Project1"></li>
+        </ul>      
+        <ul>          
+          <li style="list-style-type:none;"><input type="checkbox" (click)="EnableDates()" style="width: 20px;float: left;" formControlName="enableDates" class="form-control" id="enableDates">Set Start and End Date</li>
+          <li style="list-style-type:none;"><br></li>               
+          <li style="list-style-type:none;"><label for="Start_Date">Start Date:</label></li>
+          <li style="list-style-type:none;"><input type="date" disabled formControlName="Start_Date" placeholder="Start Date" name="Start_Date" class="form-control" id="Start_Date"></li>
+          <li style="list-style-type:none;"><br></li>
+          <li style="list-style-type:none;"><label for="End_Date">End Date:</label></li>
+          <li style="list-style-type:none;"><input type="date" disabled formControlName="End_Date" placeholder="End Date" name="End_Date" class="form-control" id="End_Date"></li>                    
+          <li style="list-style-type:none;"><label for="Priority">Priority:</label></li>
+          <li style="list-style-type: none;">
+            <div>
+              <span>0</span>
+              <span style="float: right!important;">30</span>
+            </div>
+          </li>
+          <li style="list-style-type: none;"><input type="range" min="1" max="30" value="0" step="1" formControlName="Priority" placeholder="Priority" name="Priority" class="form-control" id="Priority"></li>
+          <li style="list-style-type: none;">
+            <div class="btn-group" role="group"  aria-label="...">
+              <button class="btn btn-default" id="AddorUpdate">Add</button>                        
+          </div>
+          </li>
+        </ul>                
+      </div>          
+    </form>    
+    <div>
+      <ul>
+        <li style="list-style-type: none;"><button class="btn btn-default">Reset</button></li>
+      </ul>        
+    </div>
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered" *ngIf=''>
+          <!-- <thead>
+              <tr>
+                  <th><input type="text" placeholder="Search" [(ngModel)]='userNameFilter'></th>
+                  <th>Sort</th>
+                  <th><button class="btn btn-default">First Name</button></th>
+                  <th><button class="btn btn-default">Last Name</button></th>
+                  <th><button class="btn btn-default">ID</button></th>
+              </tr>                                
+          </thead>
+          <tbody *ngFor='let user of filterUsers'>
+            <tr><td>{{user.FirstName}}</td><td><button class="btn btn-default" (click)="editUser(user.User_ID)">Edit</button></td></tr>
+            <tr><td>{{user.LastName}}</td><td><button class="btn btn-default" (click)="deleteUser(user)">Delete</button></td></tr>
+            <tr><td>{{user.Employee_ID}}</td></tr>
+            <tr><br></tr>          
+          </tbody> -->
+      </table>
+    </div>   
+</div>
