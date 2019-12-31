@@ -10,10 +10,11 @@ import { catchError, tap, map } from 'rxjs/operators';
     providedIn:'root'
 })
 export class TaskService{
-    private taskURL='http://localhost/webapi/api/task';    
-    private completeTaskURL='http://localhost/webapi/api/CompleteTask';
-    
+    private taskURL='http://localhost/webapi/api/task';
+    private completeTaskURL='http://localhost/webapi/api/CompleteTask';    
     private singleTaskURL='';
+
+    private parentTaskURL='http://localhost/webapi/api/parenttask';
     
 
     constructor(private http:HttpClient){}
@@ -36,6 +37,10 @@ export class TaskService{
 
     createTask(task: ITask) {        
         return this.http.post(this.taskURL, task);
+    }
+
+    createParentTask(task:ITask){
+        return this.http.post(this.parentTaskURL, task);
     }
 
     updateTask(id:number,task: ITask) {  

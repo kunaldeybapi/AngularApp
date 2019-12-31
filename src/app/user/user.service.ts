@@ -6,57 +6,59 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 
 @Injectable({
-    providedIn:'root'
+    providedIn: 'root'
 })
 
-export class UserService{
-    private addUserURL='http://localhost/webapi/api/users';
-    private updateUserURL='http://localhost/webapi/api/UpdateUser';      
-    private removeUserURL='http://localhost/webapi/api/RemoveUser';
-    private singleUserURL='';
+export class UserService {
+    private addUserURL = 'http://localhost/webapi/api/users';
+    private updateUserURL = 'http://localhost/webapi/api/UpdateUser';
+    private removeUserURL = 'http://localhost/webapi/api/RemoveUser';
+    private updateUserProjectURL = 'http://localhost/webapi/api/UpdateUserProject';
+    private singleUserURL = '';
 
-    constructor(private http:HttpClient){}
+    constructor(private http: HttpClient) { }
 
-    getUsers():Observable<IUser[]>{
+    getUsers(): Observable<IUser[]> {
         return this.http.get<IUser[]>(this.addUserURL).pipe(
-            tap(data=> console.log('All User data: '+JSON.stringify(data))),
+            tap(data => console.log('All User data: ' + JSON.stringify(data))),
             catchError(this.handleError)
         );
-    }    
-
-    getUserDetail(id:number): Observable<IUser | undefined>{
-        this.singleUserURL=this.addUserURL+"/"+id;       
-        return this.http.get<IUser>(this.singleUserURL).pipe(
-            tap(data=> console.log('Single User details: '+JSON.stringify(data),'User URI: '+ JSON.stringify(this.singleUserURL))),
-            catchError(this.handleError),            
-        );        
     }
 
-    createUser(user: IUser) {        
+    getUserDetail(id: number): Observable<IUser | undefined> {
+        this.singleUserURL = this.addUserURL + "/" + id;
+        return this.http.get<IUser>(this.singleUserURL).pipe(
+            tap(data => console.log('Single User details: ' + JSON.stringify(data), 'User URI: ' + JSON.stringify(this.singleUserURL))),
+            catchError(this.handleError),
+        );
+    }
+
+    createUser(user: IUser) {
         return this.http.post(this.addUserURL, user);
     }
 
-    updateUser(id:number,user: IUser) {  
-        this.singleUserURL=this.updateUserURL+"/"+id;      
+    updateUser(id: number, user: IUser) {
+        this.singleUserURL = this.updateUserURL + "/" + id;
         return this.http.post(this.singleUserURL, user);
     }
 
-    deleteUser(user: IUser){        
+    deleteUser(user: IUser) {
         return this.http.post(this.removeUserURL, user);
     }
 
-    updateUserProject(user:IUser){
-        
+    updateUserProject(userID: number, user:IUser) {
+        this.singleUserURL = this.updateUserProjectURL + "/" + userID;
+        return this.http.post(this.singleUserURL, user);
     }
 
-    handleError(err:HttpErrorResponse){
-        let errorMessage='';
-        if(err.error instanceof ErrorEvent){
+    handleError(err: HttpErrorResponse) {
+        let errorMessage = '';
+        if (err.error instanceof ErrorEvent) {
             //client error
-            errorMessage=`An error occured: ${err.error.message}`;
-        }else{
+            errorMessage = `An error occured: ${err.error.message}`;
+        } else {
             //server error
-            errorMessage=`Server returned code: ${err.status}, with error message: ${err.message}`;
+            errorMessage = `Server returned code: ${err.status}, with error message: ${err.message}`;
         }
         console.error(errorMessage);
         return throwError(errorMessage);

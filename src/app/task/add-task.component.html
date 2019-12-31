@@ -7,6 +7,8 @@
                         class="form-control" id="Project"><br></li>
                 <li style="list-style-type:none;">
                     <button type="button" class="btn btn-default" (click)="openModalDialog('projects')">Search</button>
+                    <input type="hidden" formControlName="Project_ID" name="Project_ID" class="form-control"
+                        id="Project_ID">
                 </li>
                 <li style="list-style-type:none;"><br></li>
                 <li style="list-style-type: none;">
@@ -31,12 +33,15 @@
                             name="Priority" class="form-control" id="Priority">
                     </div>
                 </li>
-                <li style="list-style-type: none;"><label for="Parent_ID">Parent Task:</label></li>
-                <li style="list-style-type: none;"><input type="text" disabled formControlName="Parent_ID"
-                        placeholder="Parent Task" name="Parent_ID" class="form-control" id="Parent_ID"></li>
+                <li style="list-style-type: none;"><label for="ParentTask">Parent Task:</label></li>
+                <li style="list-style-type: none;"><input type="text" disabled formControlName="ParentTask"
+                        placeholder="Parent Task" name="ParentTask" class="form-control" id="ParentTask"></li>
                 <li style="list-style-type:none;"><br></li>
                 <li style="list-style-type:none;"><button type="button" id="SearchTask" class="btn btn-default"
-                        (click)="openModalDialog('tasks');">Search</button></li>
+                        (click)="openModalDialog('tasks');">Search</button>
+                    <input type="hidden" formControlName="Parent_ID" name="Parent_ID" class="form-control"
+                        id="Parent_ID">
+                </li>
                 <li style="list-style-type:none;"><br></li>
                 <li style="list-style-type: none;"><label for="Start_Date">Start Date:</label></li>
                 <li style="list-style-type:none;"><input type="date" formControlName="Start_Date"
@@ -53,7 +58,8 @@
                 </li>
                 <li style="list-style-type:none;"><br></li>
                 <li style="list-style-type:none;"><button type="button" id="SearchUser" class="btn btn-default"
-                        (click)="openModalDialog('users');">Search</button></li>
+                        (click)="openModalDialog('users');">Search</button>
+                </li>
                 <li style="list-style-type:none;"><br></li>
 
                 <li style="list-style-type: none;">

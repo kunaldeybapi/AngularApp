@@ -34,10 +34,13 @@ export class AddTaskComponent implements OnInit {
   filterUsers: IUser[];
   selectedUserName: string;
   selectedUserID: number;
+  parentTaskIndicator: boolean;
 
-  constructor(private router: Router, private userService:UserService,private taskService: TaskService, private projectService: ProjectService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private userService: UserService, private taskService: TaskService, private projectService: ProjectService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
 
   addForm: FormGroup;
+  addParentForm: FormGroup;
+  updateUserForm:FormGroup;
 
   ngOnInit() {
     this.addForm = this.formBuilder.group({
@@ -45,10 +48,20 @@ export class AddTaskComponent implements OnInit {
       Task1: ['', Validators.required],
       Priority: ['0', Validators.required],
       Parent_ID: [''],
+      ParentTask: [''],
       Start_Date: ['', Validators.required],
       End_Date: ['', Validators.required],
       Project: [''],
-      User:['']
+      User: [''],
+      Project_ID: [''],
+    });
+
+    this.addParentForm = this.formBuilder.group({
+      Parent_Task: ['']
+    });
+
+    this.updateUserForm=this.formBuilder.group({
+      Project_ID:['']
     });
 
     this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
@@ -77,23 +90,21 @@ export class AddTaskComponent implements OnInit {
     this.filterProjects = this._projectNameFilter ? this.performProjectNameFilter(this._projectNameFilter) : this.projects;
   }
 
-  
-  private _userNameFilter : string;
-  public get userNameFilter() : string {
+  private _userNameFilter: string;
+  public get userNameFilter(): string {
     return this._userNameFilter;
   }
-  public set userNameFilter(v : string) {
+  public set userNameFilter(v: string) {
     this._userNameFilter = v;
-    this.filterUsers=this._userNameFilter?this.performUserNameFilter(this._userNameFilter):this.users;
+    this.filterUsers = this._userNameFilter ? this.performUserNameFilter(this._userNameFilter) : this.users;
   }
-  
-
 
   onSubmit(): void {
     const taskName = this.addForm.get('Task1').value;
     const priority = this.addForm.get('Priority').value;
     const startDate = this.addForm.get('Start_Date').value;
     const endDate = this.addForm.get('End_Date').value;
+    
 
     if (taskName == "" || priority == "" || startDate == "" || endDate == "") {
       alert('Please provide all the mandatory deatils: Task name, Priority, Start Date and End Date to add a new task!');
@@ -106,6 +117,19 @@ export class AddTaskComponent implements OnInit {
         .subscribe(data => {
           this.router.navigate(['/tasks']);
         });
+
+      if (this.parentTaskIndicator) {
+        this.addParentForm.controls['Parent_Task'].setValue(taskName);
+        this.taskService.createParentTask(this.addParentForm.value).subscribe(data => {
+          this.router.navigate(['/tasks']);
+        });
+      }
+
+      if (this.selectedProjectID && this.selectedUserID) {
+        this.userService.updateUserProject(this.selectedUserID,this.updateUserForm.value).subscribe(data => {
+          this.router.navigate(['/tasks']);
+        });
+      }
     }
   }
 
@@ -147,7 +171,7 @@ export class AddTaskComponent implements OnInit {
         error: err => (this.errorMessage = err)
       });
     }
-    else if(searchFilter == 'users'){
+    else if (searchFilter == 'users') {
       this.selectedSearch = 'users';
       this.display = 'block'; //Set block css
       this.userService.getUsers().subscribe({
@@ -160,43 +184,49 @@ export class AddTaskComponent implements OnInit {
     }
   }
 
-  selectProject(project: IProject): void {
-    this.selectedProjectID = project.Project_ID;
-    this.selectedProjectName = project.Project1;
-    this.addForm.get('Project').setValue(this.selectedProjectName);
-  }
-
   closeModalDialog() {
     this.display = 'none'; //set none css after close dialog
   }
 
   createParentTask() {
     this.disableControls = !this.disableControls;
+    this.parentTaskIndicator = true;
     if (this.disableControls) {
       this.addForm.get('Priority').disable();
-      this.addForm.get('Parent_ID').disable();
+      this.addForm.get('ParentTask').disable();
       this.addForm.get('Start_Date').disable();
       this.addForm.get('End_Date').disable();
-      document.getElementById('SearchTask').setAttribute('disabled','true');
+      document.getElementById('SearchTask').setAttribute('disabled', 'true');
+      document.getElementById('SearchUser').setAttribute('disabled', 'true');
     }
     else {
       this.addForm.get('Priority').enable();
       this.addForm.get('Start_Date').enable();
       this.addForm.get('End_Date').enable();
       document.getElementById('SearchTask').removeAttribute('disabled');
+      document.getElementById('SearchUser').removeAttribute('disabled');
     }
+  }
+
+  selectProject(project: IProject): void {
+    this.selectedProjectID = project.Project_ID;
+    this.selectedProjectName = project.Project1;
+    this.addForm.get('Project').setValue(this.selectedProjectName);
+    this.addForm.get('Project_ID').setValue(this.selectedProjectID);
+    this.updateUserForm.get('Project_ID').setValue(this.selectedProjectID);
   }
 
   selectTask(task: ITask): void {
     this.selectedTaskID = task.Task_ID;
     this.selectedTaskName = task.Task1;
-    this.addForm.get('Parent_ID').setValue(this.selectedTaskName);
+    this.addForm.get('ParentTask').setValue(this.selectedTaskName);
+    this.addForm.get('Parent_ID').setValue(this.selectedTaskID);
   }
 
-  selectUser(user:IUser):void{
+  selectUser(user: IUser): void {
     this.selectedUserID = user.User_ID;
-    this.selectedUserName = user.FirstName+ " "+user.LastName;
-    this.addForm.get('User').setValue(this.selectedUserName);
+    this.selectedUserName = user.FirstName + " " + user.LastName;
+    this.addForm.get('User').setValue(this.selectedUserName);    
   }
 
   onReset(): void {
