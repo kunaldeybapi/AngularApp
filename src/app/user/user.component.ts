@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserService} from './user.service'
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UserService } from './user.service'
 import { IUser } from './user';
 import { stringify } from 'querystring';
 import { first } from 'rxjs/operators';
@@ -13,90 +13,132 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  selectedUserID:number;
-  errorMessage:string='';
-  addUserForm:FormGroup;
-  filterUsers:IUser[];
-  users:IUser[]=[];
-  
-  constructor(private router: Router, private userService: UserService, private route: ActivatedRoute,private formBuilder: FormBuilder) { }
+  selectedUserID: number;
+  errorMessage: string = '';
+  addUserForm: FormGroup;
+  filterUsers: IUser[];
+  users: IUser[] = [];
+
+  constructor(private router: Router, private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.userService.getUsers().subscribe({
-      next: users=>{
-          this.users=users;
-          this.filterUsers=this.users;
+      next: users => {
+        this.users = users;
+        this.filterUsers = this.users;
       },
-      error: err=>(this.errorMessage=err)
-  });
+      error: err => (this.errorMessage = err)
+    });
 
-    this.addUserForm = this.formBuilder.group({               
+    this.addUserForm = this.formBuilder.group({
       FirstName: ['', Validators.required],
       LastName: ['', Validators.required],
-      Employee_ID: ['',Validators.required]      
+      Employee_ID: ['', Validators.required]
     });
   }
 
-  private _userNameFilter : string;
-  public get userNameFilter() : string {
+  private _userNameFilter: string;
+  public get userNameFilter(): string {
     return this._userNameFilter;
   }
-  public set userNameFilter(v : string) {
+  public set userNameFilter(v: string) {
     this._userNameFilter = v;
-    this.filterUsers=this._userNameFilter?this.performUserNameFilter(this._userNameFilter):this.users;
+    this.filterUsers = this._userNameFilter ? this.performUserNameFilter(this._userNameFilter) : this.users;
   }
 
-  onSubmit():void {
-    const firstName=this.addUserForm.get('FirstName').value;
-    const lastName=this.addUserForm.get('LastName').value;    
-    const employee_ID=this.addUserForm.get('Employee_ID').value;
-    
+  onSubmit(): void {
+    const firstName = this.addUserForm.get('FirstName').value;
+    const lastName = this.addUserForm.get('LastName').value;
+    const employee_ID = this.addUserForm.get('Employee_ID').value;
 
-    if(firstName== "" || lastName == "" || employee_ID == ""){
+
+    if (firstName == "" || lastName == "" || employee_ID == "") {
       alert('Please fill in all the mandatory details: First name, Last name & Employee ID to add a new user!');
     }
-    else{
-      var action="";
-      action=document.getElementById('AddorUpdate').innerHTML.toLocaleLowerCase();
-      if(action=="add"){
-          this.userService.createUser(this.addUserForm.value).subscribe( data => {
+    else {
+      var action = "";
+      action = document.getElementById('AddorUpdate').innerHTML.toLocaleLowerCase();
+      if (action == "add") {
+        this.userService.createUser(this.addUserForm.value).subscribe(data => {
           window.location.reload();
-      });
+        });
+      }
+      if (action == "update") {
+        this.userService.updateUser(this.selectedUserID, this.addUserForm.value).pipe(first()).subscribe(data => {
+          window.location.reload();
+        })
+      }
     }
-      if(action=="update"){
-          this.userService.updateUser(this.selectedUserID,this.addUserForm.value).pipe(first()).subscribe( data => {
-          window.location.reload();
-      })
-    }                
   }
-}
 
   performUserNameFilter(filterBy: string): IUser[] {
-    filterBy=filterBy.toLocaleLowerCase();
-    return this.users.filter((users: IUser) => users.FirstName.toLocaleLowerCase().indexOf(filterBy)!== -1);
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.users.filter((users: IUser) => users.FirstName.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
-  editUser(userID: number){   
+  editUser(userID: number) {
     this.userService.getUserDetail(userID).subscribe(
       data => {
         this.addUserForm.controls['FirstName'].setValue(data.FirstName);
         this.addUserForm.controls['LastName'].setValue(data.LastName);
         this.addUserForm.controls['Employee_ID'].setValue(data.Employee_ID);
-        this.selectedUserID=userID;       
-    });
-    document.getElementById('AddorUpdate').innerHTML="Update";
+        this.selectedUserID = userID;
+      });
+    document.getElementById('AddorUpdate').innerHTML = "Update";
   }
 
-  deleteUser(user:IUser){   
+  deleteUser(user: IUser) {
     return this.userService.deleteUser(user).pipe().subscribe(
       data => {
-          window.location.reload();
-        });
+        window.location.reload();
+      });
   }
 
-  onReset():void{
-    this.addUserForm.reset({FirstName:'',LastName:'',Employee_ID:''});
-    document.getElementById('AddorUpdate').innerHTML="Add";
+  sortUserData(sortValue: string): void {
+    if (sortValue === 'firstname') {
+      this.users.sort(this.sortByFirstName);
+    }
+    else if (sortValue === 'lastname') {
+      this.users.sort(this.sortByLastName);
+    }
+    else if (sortValue === 'ID') {
+      this.users.sort(this.sortByID);
+    }
+  }
+
+  sortByFirstName(a: IUser, b: IUser) {
+    if (a.FirstName.toLowerCase() < b.FirstName.toLowerCase()) {
+      return -1;
+    } else if (a.FirstName.toLowerCase() > b.FirstName.toLowerCase()) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  sortByLastName(a: IUser, b: IUser) {
+    if (a.LastName.toLowerCase() < b.LastName.toLowerCase()) {
+      return -1;
+    } else if (a.LastName.toLowerCase() > b.LastName.toLowerCase()) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }  
+
+  sortByID(a: IUser, b: IUser) {
+    if (a.Employee_ID < b.Employee_ID) {
+      return -1;
+    } else if (a.Employee_ID > b.Employee_ID) {
+      return 1;
+    } else {
+      return 0;
+    }    
+   }
+
+  onReset(): void {
+    this.addUserForm.reset({ FirstName: '', LastName: '', Employee_ID: '' });
+    document.getElementById('AddorUpdate').innerHTML = "Add";
   }
 
 }

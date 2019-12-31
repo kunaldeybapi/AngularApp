@@ -6,6 +6,8 @@ import { ProjectService } from '../project/project.service';
 import { IProject } from '../project/project';
 import { ITask } from './task';
 import { formatDate } from '@angular/common';
+import { IUser } from '../user/user';
+import { UserService } from '../user/user.service';
 
 
 @Component({
@@ -28,8 +30,12 @@ export class AddTaskComponent implements OnInit {
   filterTasks: ITask[];
   currentDate: string;
   date: Date;
+  users: IUser[];
+  filterUsers: IUser[];
+  selectedUserName: string;
+  selectedUserID: number;
 
-  constructor(private router: Router, private taskService: TaskService, private projectService: ProjectService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private userService:UserService,private taskService: TaskService, private projectService: ProjectService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
 
   addForm: FormGroup;
 
@@ -41,7 +47,8 @@ export class AddTaskComponent implements OnInit {
       Parent_ID: [''],
       Start_Date: ['', Validators.required],
       End_Date: ['', Validators.required],
-      Project: ['']
+      Project: [''],
+      User:['']
     });
 
     this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
@@ -69,6 +76,17 @@ export class AddTaskComponent implements OnInit {
     this._projectNameFilter = v;
     this.filterProjects = this._projectNameFilter ? this.performProjectNameFilter(this._projectNameFilter) : this.projects;
   }
+
+  
+  private _userNameFilter : string;
+  public get userNameFilter() : string {
+    return this._userNameFilter;
+  }
+  public set userNameFilter(v : string) {
+    this._userNameFilter = v;
+    this.filterUsers=this._userNameFilter?this.performUserNameFilter(this._userNameFilter):this.users;
+  }
+  
 
 
   onSubmit(): void {
@@ -101,6 +119,11 @@ export class AddTaskComponent implements OnInit {
     return this.tasks.filter((tasks: ITask) => tasks.Task1.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
+  performUserNameFilter(filterBy: string): IUser[] {
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.users.filter((users: IUser) => users.FirstName.toLocaleLowerCase().indexOf(filterBy) !== -1);
+  }
+
   openModalDialog(searchFilter: string) {
     if (searchFilter == 'projects') {
       this.selectedSearch = 'projects';
@@ -120,6 +143,17 @@ export class AddTaskComponent implements OnInit {
         next: tasks => {
           this.tasks = tasks;
           this.filterTasks = this.tasks;
+        },
+        error: err => (this.errorMessage = err)
+      });
+    }
+    else if(searchFilter == 'users'){
+      this.selectedSearch = 'users';
+      this.display = 'block'; //Set block css
+      this.userService.getUsers().subscribe({
+        next: users => {
+          this.users = users;
+          this.filterUsers = this.users;
         },
         error: err => (this.errorMessage = err)
       });
@@ -157,6 +191,12 @@ export class AddTaskComponent implements OnInit {
     this.selectedTaskID = task.Task_ID;
     this.selectedTaskName = task.Task1;
     this.addForm.get('Parent_ID').setValue(this.selectedTaskName);
+  }
+
+  selectUser(user:IUser):void{
+    this.selectedUserID = user.User_ID;
+    this.selectedUserName = user.FirstName+ " "+user.LastName;
+    this.addForm.get('User').setValue(this.selectedUserName);
   }
 
   onReset(): void {

@@ -66,7 +66,7 @@ export class TaskComponent implements OnInit{
     }
     public set parentTaskFilter(v : string) {
         this._parentTaskFilter = v;
-        this.filterTasks=this._parentTaskFilter?this.performParentTaskFilter(this._parentTaskFilter):this.tasks;
+        //this.filterTasks=this._parentTaskFilter?this.performParentTaskFilter(this._parentTaskFilter):this.tasks;
     }
 
     
@@ -93,10 +93,10 @@ export class TaskComponent implements OnInit{
         return this.tasks.filter((tasks: ITask) => tasks.Task1.toLocaleLowerCase().indexOf(filterBy)!== -1);
     }
 
-    performParentTaskFilter(filterBy: string): ITask[] {
-        filterBy=filterBy.toLocaleLowerCase();
-        return this.tasks.filter((tasks: ITask) => tasks.Parent_ID.toLocaleLowerCase().indexOf(filterBy)!== -1);
-    }
+    // performParentTaskFilter(filterBy: string): ITask[] {
+    //     filterBy=filterBy.toLocaleLowerCase();
+    //     return this.tasks.filter((tasks: ITask) => tasks.Parent_ID.toLocaleLowerCase().indexOf(filterBy)!== -1);
+    // }
 
     performPriorityFromFiler(filterBy: number): ITask[] {        
         return this.tasks.filter((tasks:ITask)=> tasks.Priority >= filterBy)

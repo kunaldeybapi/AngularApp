@@ -47,6 +47,16 @@
                         name="End_Date" class="form-control" id="End_Date"></li>
                 <li style="list-style-type:none;"><br></li>
                 <li style="list-style-type: none;">
+                    <label for="User">User:</label>
+                    <input type="text" disabled formControlName="User" placeholder="User Name" name="User"
+                        class="form-control" id="User">
+                </li>
+                <li style="list-style-type:none;"><br></li>
+                <li style="list-style-type:none;"><button type="button" id="SearchUser" class="btn btn-default"
+                        (click)="openModalDialog('users');">Search</button></li>
+                <li style="list-style-type:none;"><br></li>
+
+                <li style="list-style-type: none;">
                     <div class="btn-group" role="group" aria-label="...">
                         <button class="btn btn-default">Add Task</button>
                     </div>
@@ -100,6 +110,21 @@
                             <tr>
                                 <td>{{task.Task1}}</td>
                                 <td><button class="btn btn-default" (click)='selectTask(task)'>Select</button></td>
+                            </tr>
+                            <tr><br></tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered" *ngIf="selectedSearch==='users'">
+                        <thead>
+                            <tr>
+                                <th><input type="text" placeholder="Search" [(ngModel)]='userNameFilter'></th>
+                                <th>Select Task</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor='let user of filterUsers'>
+                            <tr>
+                                <td>{{user.FirstName}}</td>
+                                <td><button class="btn btn-default" (click)='selectUser(user)'>Select</button></td>
                             </tr>
                             <tr><br></tr>
                         </tbody>

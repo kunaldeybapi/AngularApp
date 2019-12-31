@@ -27,9 +27,9 @@
               <tr>
                   <th><input type="text" placeholder="Search" [(ngModel)]='userNameFilter'></th>
                   <th>Sort</th>
-                  <th><button class="btn btn-default">First Name</button></th>
-                  <th><button class="btn btn-default">Last Name</button></th>
-                  <th><button class="btn btn-default">ID</button></th>
+                  <th><button class="btn btn-default" (click)="sortUserData('firstname')">First Name</button></th>
+                  <th><button class="btn btn-default" (click)="sortUserData('lastname')">Last Name</button></th>
+                  <th><button class="btn btn-default" (click)="sortUserData('ID')">ID</button></th>
               </tr>                                
           </thead>
           <tbody *ngFor='let user of filterUsers'>

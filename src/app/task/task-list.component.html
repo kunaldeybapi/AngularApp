@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <td class="dataElements">{{task.Task1}}</td>
-                        <td class="dataElements">{{(task.Parent_ID == "" || task.Parent_ID == null) ? "This task has NO parent task": task.Parent_ID}}</td>                            
+                        <td class="dataElements">{{(task.Parent_ID == null) ? "This task has NO parent task": task.Parent_ID}}</td>                            
                         <td class="dataElements">{{task.Start_Date}}</td>
                         <td class="dataElements">{{task.End_Date}}</td>
                         <td class="dataElements">{{task.Priority}}</td>
