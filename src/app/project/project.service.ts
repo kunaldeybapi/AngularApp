@@ -10,7 +10,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 })
 
 export class ProjectService{
-    private addProjectURL='http://localhost/webapi/api/projects';
+    private addProjectURL='http://localhost/webapi/api/projects';    
     private updateProjectURL='http://localhost/webapi/api/UpdateProject';      
     private removeProjectURL='http://localhost/webapi/api/RemoveProject';
     private singleProjectURL='';

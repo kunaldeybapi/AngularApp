@@ -45,6 +45,10 @@ export class UserService{
         return this.http.post(this.removeUserURL, user);
     }
 
+    updateUserProject(user:IUser){
+        
+    }
+
     handleError(err:HttpErrorResponse){
         let errorMessage='';
         if(err.error instanceof ErrorEvent){

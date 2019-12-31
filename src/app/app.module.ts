@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule } from '@angular/common/http';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,13 +14,12 @@ import { AddTaskComponent } from './task/add-task.component';
 import { UserComponent } from './user/user.component';
 import { ProjectComponent } from './project/project.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
     TaskComponent,
     TaskDetailsComponent,    
-    AddTaskComponent, UserComponent, ProjectComponent
+    AddTaskComponent, UserComponent, ProjectComponent,   
   ],
   imports: [
     BrowserModule,
@@ -36,12 +36,12 @@ import { ProjectComponent } from './project/project.component';
         component: TaskDetailsComponent
       },
       {path:'user',component:UserComponent},
-      {path:'project',component:ProjectComponent},
+      {path:'project',component:ProjectComponent},      
       {path:'',redirectTo:'tasks',pathMatch:'full'},
       {path:'**',redirectTo:'tasks',pathMatch:'full'}
     ],{useHash: true})
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent]  
 })
 export class AppModule { }
