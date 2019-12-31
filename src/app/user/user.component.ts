@@ -13,7 +13,7 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  selectedUserID:number; 
+  selectedUserID:number;
   errorMessage:string='';
   addUserForm:FormGroup;
   filterUsers:IUser[];

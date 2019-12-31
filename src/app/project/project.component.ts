@@ -67,12 +67,7 @@ export class ProjectComponent implements OnInit {
           this.projectService.createProject(this.addProjectForm.value).subscribe( data => {
             window.location.reload();
       });
-    }
-    //   if(action=="update"){
-    //       this.projectService.updateUser(this.selectedUserID,this.addUserForm.value).pipe(first()).subscribe( data => {
-    //       window.location.reload();
-    //   })
-    // }                
+    }               
   }
 }
 

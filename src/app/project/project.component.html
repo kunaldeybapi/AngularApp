@@ -25,7 +25,7 @@
           <li style="list-style-type: none;">Manager:</li>
           <li style="list-style-type: none;" ><input type="text" disabled formControlName="Manager" placeholder="" class="form-control" id="Manager"><br></li>          
           <li style="list-style-type:none;">
-            <button type="button" class="btn btn-default" (click)="openModalDialog()">Open Modal Dialog!</button>
+            <button type="button" class="btn btn-default" (click)="openModalDialog()">Search</button>
           </li>
           <li style="list-style-type:none;"><br></li>
           <li style="list-style-type: none;">
@@ -52,7 +52,7 @@
     <div class="modal-content">
       <!-- modal-header -->
       <div class="modal-header">
-        <button type="button" class="close" aria-label="Close" (click)="openModalDialog()"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" aria-label="Close" (click)="closeModalDialog()"><span aria-hidden="true">&times;</span></button>
         <!-- <h4 class="modal-title">Login</h4> -->
       </div>
 
