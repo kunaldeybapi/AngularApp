@@ -22,7 +22,7 @@ export class TaskComponent implements OnInit {
     display: string;
     projects: IProject[];
     filterProjects: IProject[];
-    selectedProjectID:number;
+    selectedProjectID: number;
 
     constructor(private route: ActivatedRoute, private projectService: ProjectService, private taskService: TaskService, private router: Router) {
         this._taskFilter = '';
@@ -69,6 +69,9 @@ export class TaskComponent implements OnInit {
         else if (sortValue === 'priority') {
             this.tasks.sort(this.sortByPriority);
         }
+        else if (sortValue === 'complete') {
+            this.tasks.sort(this.sortByCompletion);
+        }
     }
 
     sortByStartDate(a: ITask, b: ITask) {
@@ -101,16 +104,26 @@ export class TaskComponent implements OnInit {
         }
     }
 
+    sortByCompletion(a: ITask, b: ITask) {
+        if (a.isTaskComplete < b.isTaskComplete) {
+            return -1;
+        } else if (a.isTaskComplete > b.isTaskComplete) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     selectProject(project: IProject): void {
-        document.getElementById('Project').setAttribute('value',project.Project1);
-        this.selectedProjectID=project.Project_ID;
+        document.getElementById('Project').setAttribute('value', project.Project1);
+        this.selectedProjectID = project.Project_ID;
         this.taskService.getProjectTasks(this.selectedProjectID).subscribe({
             next: tasks => {
                 this.tasks = tasks;
                 this.filterTasks = this.tasks;
             },
             error: err => (this.errorMessage = err)
-        });        
+        });
     }
 
     openModalDialog(searchFilter: string) {

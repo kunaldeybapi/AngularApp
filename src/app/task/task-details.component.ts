@@ -205,7 +205,7 @@ export class TaskDetailsComponent implements OnInit {
     this.selectedTaskName=task.Task1;
     this.editForm.get('Parent_ID').setValue(this.selectedTaskID);
     localStorage.removeItem('parenttaskid');
-    localStorage.setItem('parenttaskid',task.Task_ID.toString());    
+    localStorage.setItem('parenttaskid',task.Task_ID.toString());
   }
 
   onCancel(): void {
