@@ -53,7 +53,7 @@ export class AddTaskComponent implements OnInit {
       End_Date: ['', Validators.required],
       Project: [''],
       User: [''],
-      Project_ID: [''],
+      Project_ID: ['']      
     });
 
     this.addParentForm = this.formBuilder.group({

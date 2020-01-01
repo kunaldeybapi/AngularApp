@@ -1,134 +1,144 @@
 import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
-import {ITask} from './task' 
+import { ITask } from './task'
 
 import { TaskService } from './task.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { IProject } from '../project/project';
+import { ProjectService } from '../project/project.service';
 
 @Component({
-    selector:'tm-viewtask',
-    templateUrl:'./task-list.component.html',
-    styleUrls:['./task-list.component.css']
+    selector: 'tm-viewtask',
+    templateUrl: './task-list.component.html',
+    styleUrls: ['./task-list.component.css']
 })
 
-export class TaskComponent implements OnInit{        
-    filterTasks:ITask[];
-    tasks:ITask[]=[];
-    errorMessage:string='';
+export class TaskComponent implements OnInit {
+    filterTasks: ITask[];
+    tasks: ITask[] = [];
+    errorMessage: string = '';
+    selectedSearch: string;
+    private _taskFilter: string;
+    display: string;
+    projects: IProject[];
+    filterProjects: IProject[];
+    selectedProjectID:number;
 
-    private _taskFilter : string;
-
-    constructor(private route: ActivatedRoute, private taskService:TaskService, private router:Router){        
-        this._taskFilter='';        
+    constructor(private route: ActivatedRoute, private projectService: ProjectService, private taskService: TaskService, private router: Router) {
+        this._taskFilter = '';
     }
 
-    ngOnInit(): void {        
+    ngOnInit(): void {
         this.taskService.getTasks().subscribe({
-            next: tasks=>{
-                this.tasks=tasks;
-                this.filterTasks=this.tasks;
+            next: tasks => {
+                this.tasks = tasks;
+                this.filterTasks = this.tasks;
             },
-            error: err=>(this.errorMessage=err)
-        });        
+            error: err => (this.errorMessage = err)
+        });
     }
 
-    
-    private _startDateFilter : string;
-    public get startDateFilter() : string {
-        return this._startDateFilter;
+
+    private _projectNameFilter: string;
+    public get projectNameFilter(): string {
+        return this._projectNameFilter;
     }
-    public set startDateFilter(v : string) {
-        this._startDateFilter = v;
-        this.filterTasks=this._startDateFilter?this.performStartDateFilter(this._startDateFilter):this.tasks;
+    public set projectNameFilter(v: string) {
+        this._projectNameFilter = v;
+        this.filterProjects = this._projectNameFilter ? this.performProjectNameFilter(this._projectNameFilter) : this.projects;
     }
 
-    
-    private _endDateFilter : string;
-    public get endDateFilter() : string {
-        return this._endDateFilter;
-    }
-    public set endDateFilter(v : string) {
-        this._endDateFilter = v;
-        this.filterTasks=this._endDateFilter?this.performEndDateFilter(this._endDateFilter):this.tasks;
-    }
-
-    public get taskFilter() : string {
-        return this._taskFilter;
-    }
-    public set taskFilter(v : string) {
-        this._taskFilter = v;
-        this.filterTasks=this._taskFilter?this.performTaskFilter(this._taskFilter):this.tasks;
-    }
-    
-    private _parentTaskFilter : string;
-    public get parentTaskFilter() : string {
-        return this._parentTaskFilter;
-    }
-    public set parentTaskFilter(v : string) {
-        this._parentTaskFilter = v;
-        //this.filterTasks=this._parentTaskFilter?this.performParentTaskFilter(this._parentTaskFilter):this.tasks;
-    }
-
-    
-    private _priorityFromFilter : number;
-    public get priorityFromFilter() : number {
-        return this._priorityFromFilter;
-    }
-    public set priorityFromFilter(v : number) {
-        this._priorityFromFilter = v;
-        this.filterTasks=this._priorityFromFilter?this.performPriorityFromFiler(this._priorityFromFilter):this.tasks;
-    }
-    
-    private _priorityToFilter : number;
-    public get priorityToFilter() : number {
-        return this._priorityToFilter;
-    }
-    public set priorityToFilter(v : number) {
-        this._priorityToFilter = v;
-        this.filterTasks=this._priorityToFilter?this.performPriorityToFilter(this._priorityToFilter):this.tasks;
-    }       
-
-    performTaskFilter(filterBy: string): ITask[] {
-        filterBy=filterBy.toLocaleLowerCase();
-        return this.tasks.filter((tasks: ITask) => tasks.Task1.toLocaleLowerCase().indexOf(filterBy)!== -1);
-    }
-
-    // performParentTaskFilter(filterBy: string): ITask[] {
-    //     filterBy=filterBy.toLocaleLowerCase();
-    //     return this.tasks.filter((tasks: ITask) => tasks.Parent_ID.toLocaleLowerCase().indexOf(filterBy)!== -1);
-    // }
-
-    performPriorityFromFiler(filterBy: number): ITask[] {        
-        return this.tasks.filter((tasks:ITask)=> tasks.Priority >= filterBy)
-    }
-
-    performPriorityToFilter(filterBy: number): ITask[]{
-        return this.tasks.filter((tasks:ITask)=> tasks.Priority <= filterBy)
-
-    }
-
-    performStartDateFilter(filterBy: string): ITask[] {        
-        return this.tasks.filter((tasks: ITask) => tasks.Start_Date >= filterBy);
-    }
-
-    performEndDateFilter(filterBy: string): ITask[] {
-        return this.tasks.filter((tasks: ITask) => tasks.End_Date >= filterBy);
+    performProjectNameFilter(filterBy: string): IProject[] {
+        filterBy = filterBy.toLocaleLowerCase();
+        return this.projects.filter((projects: IProject) => projects.Project1.toLocaleLowerCase().indexOf(filterBy) !== -1);
     }
 
     editTask(task: ITask): void {
         localStorage.removeItem("editTaskId");
         localStorage.setItem("editTaskId", task.Task_ID.toString());
-        this.router.navigate(['/tasks',task.Task_ID]);
+        this.router.navigate(['/tasks', task.Task_ID]);
     }
 
-    endTask(task: ITask){           
+    sortTaskData(sortValue: string): void {
+        if (sortValue === 'startDate') {
+            this.tasks.sort(this.sortByStartDate);
+        }
+        else if (sortValue === 'endDate') {
+            this.tasks.sort(this.sortByEndDate);
+        }
+        else if (sortValue === 'priority') {
+            this.tasks.sort(this.sortByPriority);
+        }
+    }
+
+    sortByStartDate(a: ITask, b: ITask) {
+        if (a.Start_Date < b.Start_Date) {
+            return -1;
+        } else if (a.Start_Date > b.Start_Date) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    sortByEndDate(a: ITask, b: ITask) {
+        if (a.End_Date < b.End_Date) {
+            return -1;
+        } else if (a.End_Date > b.End_Date) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    sortByPriority(a: ITask, b: ITask) {
+        if (a.Priority < b.Priority) {
+            return -1;
+        } else if (a.Priority > b.Priority) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    selectProject(project: IProject): void {
+        document.getElementById('Project').setAttribute('value',project.Project1);
+        this.selectedProjectID=project.Project_ID;
+        this.taskService.getProjectTasks(this.selectedProjectID).subscribe({
+            next: tasks => {
+                this.tasks = tasks;
+                this.filterTasks = this.tasks;
+            },
+            error: err => (this.errorMessage = err)
+        });        
+    }
+
+    openModalDialog(searchFilter: string) {
+        if (searchFilter == 'projects') {
+            this.selectedSearch = 'projects';
+            this.display = 'block'; //Set block css
+            this.projectService.getProjects().subscribe({
+                next: projects => {
+                    this.projects = projects;
+                    this.filterProjects = this.projects;
+                },
+                error: err => (this.errorMessage = err)
+            });
+        }
+    }
+
+    closeModalDialog() {
+        this.display = 'none'; //set none css after close dialog
+    }
+
+    endTask(task: ITask) {
         return this.taskService.completeTask(task).pipe().subscribe(
             data => {
                 window.location.reload();
-              },
-              error => {
+            },
+            error => {
                 alert(error);
-              }
+            }
         );
-    }    
+    }
 }

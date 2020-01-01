@@ -11,7 +11,8 @@ import { catchError, tap, map } from 'rxjs/operators';
 })
 export class TaskService{
     private taskURL='http://localhost/webapi/api/task';
-    private completeTaskURL='http://localhost/webapi/api/CompleteTask';    
+    private completeTaskURL='http://localhost/webapi/api/CompleteTask';  
+    private getProjectTasksURL='http://localhost/webapi/api/GetProjectTasks';
     private singleTaskURL='';
 
     private parentTaskURL='http://localhost/webapi/api/parenttask';
@@ -50,6 +51,14 @@ export class TaskService{
 
     completeTask(task: ITask){        
         return this.http.post(this.completeTaskURL, task);
+    }
+
+    getProjectTasks(id:number){
+        this.singleTaskURL=this.getProjectTasksURL+"/"+id;
+        return this.http.get<ITask[]>(this.singleTaskURL).pipe(
+            tap(data=> console.log('Task for One Project: '+JSON.stringify(data))),
+            catchError(this.handleError)
+        );;
     }
 
 

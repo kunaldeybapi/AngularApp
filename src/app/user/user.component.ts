@@ -124,7 +124,7 @@ export class UserComponent implements OnInit {
     } else {
       return 0;
     }
-  }  
+  }
 
   sortByID(a: IUser, b: IUser) {
     if (a.Employee_ID < b.Employee_ID) {
@@ -133,8 +133,8 @@ export class UserComponent implements OnInit {
       return 1;
     } else {
       return 0;
-    }    
-   }
+    }
+  }
 
   onReset(): void {
     this.addUserForm.reset({ FirstName: '', LastName: '', Employee_ID: '' });

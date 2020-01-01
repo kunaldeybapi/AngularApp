@@ -1,46 +1,92 @@
-<div>    
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-2 searchfields">Task: </div>
-            <div class="col-md-4"><input type="text" [(ngModel)]='taskFilter'></div>            
-            <div class="col-md-2 searchfields">Parent Task: </div>
-            <div class="col-md-4"><input type="text" [(ngModel)]='parentTaskFilter'></div>
+<div class="col-md-8">
+    <div class="card-body">        
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td><label for="Project">Project:</label></td>
+                        <td><input type="text" disabled id="Project"></td>                        
+                        <td><button type="button" class="btn btn-default"
+                                (click)="openModalDialog('projects')">Search</button></td>
+                        <td><label for="SortTask">Sort Task By:</label></td>
+                        <td><button type="button" class="btn btn-default" (click)="sortTaskData('startDate')">Start
+                                Date</button></td>
+                        <td><button type="button" class="btn btn-default" (click)="sortTaskData('endDate')">End
+                                Date</button></td>
+                        <td><button type="button" class="btn btn-default"
+                                (click)="sortTaskData('priority')">Priority</button></td>
+                        <td><button type="button" class="btn btn-default">Completed</button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <br>
-        <div class="row">
-                <div class="col-md-1 searchfields">Priority From: </div>
-                <div class="col-md-2"><input type="number" [(ngModel)]='priorityFromFilter'></div>
-                <div class="col-md-1 searchfields">Priority To: </div>
-                <div class="col-md-2"><input type="number"  [(ngModel)]='priorityToFilter'></div>
-                <div class="col-md-1 searchfields">Start Date: </div>
-                <div class="col-md-2"><input type="text" [(ngModel)]='startDateFilter'></div>                
-                <div class="col-md-1 searchfields">End Date: </div>
-                <div class="col-md-2"><input type="text" [(ngModel)]='endDateFilter'></div>
-        </div>    
-    </div>
-    <div style="height: 30px;"></div>
-    <div class="table-responsive">    
-        <table class="table" *ngIf='tasks && tasks.length'>            
+    </div>    <div style="height: 30px;"></div>
+    <div class="table-responsive">
+        <table class="table table-bordered" *ngIf='tasks && tasks.length'>
             <tbody *ngFor='let task of filterTasks'>
-                    <tr>
-                        <td class="headerElements">Task</td>
-                        <td class="headerElements">Parent</td>                
-                        <td class="headerElements">Start</td>
-                        <td class="headerElements">End</td>
-                        <td class="headerElements">Priority</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="dataElements">{{task.Task1}}</td>
-                        <td class="dataElements">{{(task.Parent_ID == null) ? "This task has NO parent task": task.Parent_ID}}</td>                            
-                        <td class="dataElements">{{task.Start_Date}}</td>
-                        <td class="dataElements">{{task.End_Date}}</td>
-                        <td class="dataElements">{{task.Priority}}</td>
-                        <td><button class="btn btn-primary dataElements" [disabled]='task.isTaskComplete' (click)="editTask(task)">Edit</button></td>
-                        <td><button class="btn btn-primary dataElements" [disabled]='task.isTaskComplete' (click)='endTask(task)'>End Task</button></td>
-                    </tr>
-            </tbody>            
+                <tr>
+                    <td class="headerElements">Task</td>
+                    <td class="headerElements">Parent</td>
+                    <td class="headerElements">Priority</td>
+                    <td class="headerElements">Start</td>
+                    <td class="headerElements">End</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="dataElements">{{task.Task1}}</td>
+                    <td class="dataElements">
+                        {{(task.Parent_ID == null) ? "This task has NO parent task": task.Parent_ID}}</td>
+                    <td class="dataElements">{{task.Priority}}</td>
+                    <td class="dataElements">{{task.Start_Date}}</td>
+                    <td class="dataElements">{{task.End_Date}}</td>
+                    <td><button class="btn btn-primary dataElements" [disabled]='task.isTaskComplete'
+                            (click)="editTask(task)">Edit</button></td>
+                    <td><button class="btn btn-primary dataElements" [disabled]='task.isTaskComplete'
+                            (click)='endTask(task)'>End Task</button></td>
+                </tr>
+            </tbody>
         </table>
+    </div>
+</div>
+
+
+<!-- modal -->
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+    <!-- modal-dialog -->
+    <div class="modal-dialog" role="document">
+        <!-- modal-content -->
+        <div class="modal-content">
+            <!-- modal-header -->
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="closeModalDialog()"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <!-- modal-body -->
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" *ngIf="selectedSearch==='projects'">
+                        <thead>
+                            <tr>
+                                <th><input type="text" placeholder="Search" [(ngModel)]='projectNameFilter'></th>
+                                <th>Select Project</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor='let project of filterProjects'>
+                            <tr>
+                                <td>{{project.Project1}}</td>
+                                <td><button class="btn btn-default" (click)="selectProject(project)">Select</button>
+                                </td>
+                            </tr>
+                            <tr><br></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- modal-footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)="closeModalDialog()">Close</button>
+            </div>
+        </div>
     </div>
 </div>
