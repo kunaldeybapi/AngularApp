@@ -25,8 +25,13 @@ export class TaskDetailsComponent implements OnInit {
   filterUsers: IUser[];
   selectedUserID: number;
   selectedUserName: string;
+  selectedTaskID:number;
+  selectedTaskName:string;
   projects: IProject[];
   projectID: number;
+  parentTaskID:number;
+  tasks:ITask[];
+  filterTasks: ITask[];
 
   constructor(private route: ActivatedRoute,
     private router: Router, private taskservice: TaskService, private projectService: ProjectService, private userService: UserService, private formBuilder: FormBuilder) { }
@@ -59,6 +64,14 @@ export class TaskDetailsComponent implements OnInit {
     );
   }
 
+  getParentTaskname(parenttaskID: number) {
+    this.taskservice.getTaskDetail(parenttaskID).subscribe(
+      data => {
+        this.editForm.controls['Parent_ID'].setValue(data.Task1);
+      }
+    );
+  }
+
 
   private _userNameFilter: string;
   public get userNameFilter(): string {
@@ -74,25 +87,49 @@ export class TaskDetailsComponent implements OnInit {
     return this.users.filter((users: IUser) => users.FirstName.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
+  
+  private _taskNameFilter : string;
+  public get taskNameFilter() : string {
+    return this._taskNameFilter;
+  }
+  public set taskNameFilter(v : string) {
+    this._taskNameFilter = v;
+    this.filterTasks = this._taskNameFilter ? this.performTaskNameFilter(this._taskNameFilter) : this.tasks;
+  }
+
+  performTaskNameFilter(filterBy: string): ITask[] {
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.tasks.filter((tasks: ITask) => tasks.Task1.toLocaleLowerCase().indexOf(filterBy) !== -1);
+  }
 
   getTaskDetail(id: number) {
     this.taskservice.getTaskDetail(id).subscribe(
       data => {
         this.editForm.get('Task_ID').setValue(data.Task_ID);
         this.editForm.get('Task1').setValue(data.Task1);
+
         this.editForm.get('Project_ID').setValue(data.Project_ID);
         localStorage.removeItem("projectid");
         localStorage.setItem("projectid", data.Project_ID.toString());
         this.projectID = +localStorage.getItem('projectid');
         this.getProjectName(this.projectID);
+
         this.editForm.get('Priority').setValue(data.Priority);
+
         this.editForm.get('Parent_ID').setValue(data.Parent_ID);
+        localStorage.removeItem("parenttaskid");
+        localStorage.setItem("parenttaskid", data.Parent_ID.toString());
+        this.parentTaskID = +localStorage.getItem('parenttaskid');
+        this.getParentTaskname(this.parentTaskID);
+
         this.editForm.get('Start_Date').setValue(data.Start_Date);
         this.editForm.get('End_Date').setValue(data.End_Date);
       });
   }
 
   onSubmit() {
+    this.editForm.get('Project_ID').setValue(localStorage.getItem('projectid'));    
+
     this.taskservice.updateTask(this.editForm.get('Task_ID').value, this.editForm.value)
       .pipe(first())
       .subscribe(
@@ -116,6 +153,17 @@ export class TaskDetailsComponent implements OnInit {
         error: err => (this.errorMessage = err)
       });
     }
+    else if (searchFilter == 'tasks') {
+      this.selectedSearch = 'tasks';
+      this.display = 'block'; //Set block css
+      this.taskservice.getTasks().subscribe({
+        next: tasks => {
+          this.tasks = tasks;
+          this.filterTasks = this.tasks;
+        },
+        error: err => (this.errorMessage = err)
+      });
+    }
   }
 
   closeModalDialog() {
@@ -125,7 +173,13 @@ export class TaskDetailsComponent implements OnInit {
   selectUser(user: IUser): void {
     this.selectedUserID = user.User_ID;
     this.selectedUserName = user.FirstName + " " + user.LastName;
-    this.editForm.get('User').setValue(this.selectedUserName);
+    this.editForm.get('User_ID').setValue(this.selectedUserName);
+  }
+
+  selectTask(task:ITask):void{
+    this.selectedTaskID=task.Task_ID;
+    this.selectedTaskName=task.Task1;
+    this.editForm.get('Parent_ID').setValue(this.selectedTaskID);
   }
 
   onCancel(): void {

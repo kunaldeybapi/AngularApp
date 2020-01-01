@@ -22,23 +22,26 @@
         </li>
         <li style="list-style-type: none;"><br></li>
         <li style="list-style-type: none;"><label for="Parent_ID">Parent Task:</label></li>
-        <li style="list-style-type: none;"><input type="text" formControlName="Parent_ID" placeholder="Parent Task"
-            name="Parent_ID" class="form-control" id="Parent_ID"></li>
+        <li style="list-style-type: none;"><input type="text" disabled formControlName="Parent_ID"
+            placeholder="Parent Task" name="Parent_ID" class="form-control" id="Parent_ID"></li>
+        <li style="list-style-type: none;"><br></li>
+        <li style="list-style-type: none;"><button type="button" id="SearchTask" class="btn btn-default"
+            (click)="openModalDialog('tasks');">Search</button></li>
         <li style="list-style-type: none;"><br></li>
         <li style="list-style-type: none;"><label for="Start_Date">Start Date:</label></li>
-        <li style="list-style-type: none;"><input type="text" formControlName="Start_Date" placeholder="Start Date"
+        <li style="list-style-type: none;"><input type="date" formControlName="Start_Date" placeholder="Start Date"
             name="Start_Date" class="form-control" id="Start_Date"></li>
         <li style="list-style-type: none;"><br></li>
         <li style="list-style-type: none;"><label for="End_Date">End Date:</label></li>
-        <li style="list-style-type: none;"><input type="text" formControlName="End_Date" placeholder="End Date"
+        <li style="list-style-type: none;"><input type="date" formControlName="End_Date" placeholder="End Date"
             name="End_Date" class="form-control" id="End_Date"></li>
         <li style="list-style-type: none;"><br></li>
         <li style="list-style-type: none;"><input type="hidden" formControlName="isTaskComplete"
             placeholder="isTaskComplete" name="isTaskComplete" class="form-control" id="isTaskComplete"></li>
         <li style="list-style-type: none;">
           <label for="User_ID">User:</label>
-          <input type="text" disabled formControlName="User_ID" placeholder="User Name" name="User_ID" class="form-control"
-            id="User_ID">
+          <input type="text" disabled formControlName="User_ID" placeholder="User Name" name="User_ID"
+            class="form-control" id="User_ID">
         </li>
         <li style="list-style-type:none;"><br></li>
         <li style="list-style-type:none;"><button type="button" id="SearchUser" class="btn btn-default"
@@ -83,6 +86,21 @@
               <tr><br></tr>
             </tbody>
           </table>
+          <table class="table table-bordered" *ngIf="selectedSearch==='tasks'">
+            <thead>
+                <tr>
+                    <th><input type="text" placeholder="Search" [(ngModel)]='taskNameFilter'></th>
+                    <th>Select Task</th>
+                </tr>
+            </thead>
+            <tbody *ngFor='let task of filterTasks'>
+                <tr>
+                    <td>{{task.Task1}}</td>
+                    <td><button class="btn btn-default" (click)='selectTask(task)'>Select</button></td>
+                </tr>
+                <tr><br></tr>
+            </tbody>
+        </table>
         </div>
       </div>
       <!-- modal-footer -->
