@@ -14,6 +14,7 @@ export class UserService {
     private updateUserURL = 'http://localhost/webapi/api/UpdateUser';
     private removeUserURL = 'http://localhost/webapi/api/RemoveUser';
     private updateUserProjectURL = 'http://localhost/webapi/api/UpdateUserProject';
+    private updateUserTaskURL='http://localhost/webapi/api/UpdateUserTask';
     private singleUserURL = '';
 
     constructor(private http: HttpClient) { }
@@ -48,6 +49,11 @@ export class UserService {
 
     updateUserProject(userID: number, user:IUser) {
         this.singleUserURL = this.updateUserProjectURL + "/" + userID;
+        return this.http.post(this.singleUserURL, user);
+    }
+
+    updateUserTask(userID: number, user:IUser) {
+        this.singleUserURL = this.updateUserTaskURL + "/" + userID;
         return this.http.post(this.singleUserURL, user);
     }
 

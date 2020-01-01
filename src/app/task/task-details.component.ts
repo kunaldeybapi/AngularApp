@@ -19,6 +19,7 @@ export class TaskDetailsComponent implements OnInit {
   errorMessage: string = '';
   task: ITask | undefined;
   editForm: FormGroup;
+  updateUserForm:FormGroup;
   display: string;
   selectedSearch: string;
   users: IUser[];
@@ -47,6 +48,10 @@ export class TaskDetailsComponent implements OnInit {
       isTaskComplete: ['', Validators.required],
       Project_ID: [''],
       User_ID: ['']
+    });
+
+    this.updateUserForm=this.formBuilder.group({
+      Task_ID:['']
     });
 
     const param = this.route.snapshot.paramMap.get('id');
@@ -128,9 +133,22 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    this.editForm.get('Project_ID').setValue(localStorage.getItem('projectid'));    
+    this.editForm.get('Project_ID').setValue(localStorage.getItem('projectid'));
+    this.parentTaskID=+localStorage.getItem('parenttaskid');
+    this.editForm.get('Parent_ID').setValue(this.parentTaskID);
 
-    this.taskservice.updateTask(this.editForm.get('Task_ID').value, this.editForm.value)
+    const taskName = this.editForm.get('Task1').value;
+    const startDate = this.editForm.get('Start_Date').value;
+    const endDate = this.editForm.get('End_Date').value;
+
+    if(taskName=="" || taskName==null){
+      alert('Task Name cannot be blank!');
+    }
+    else if(startDate > endDate){
+      alert('End date cannot be before Start date!');
+    }
+    else{
+      this.taskservice.updateTask(this.editForm.get('Task_ID').value, this.editForm.value)
       .pipe(first())
       .subscribe(
         data => {
@@ -139,6 +157,11 @@ export class TaskDetailsComponent implements OnInit {
         error => {
           alert(error);
         });
+
+        this.userService.updateUserTask(this.selectedUserID,this.updateUserForm.value).subscribe(data => {
+          this.router.navigate(['/tasks']);
+        });;
+    }    
   }
 
   openModalDialog(searchFilter: string) {
@@ -174,12 +197,15 @@ export class TaskDetailsComponent implements OnInit {
     this.selectedUserID = user.User_ID;
     this.selectedUserName = user.FirstName + " " + user.LastName;
     this.editForm.get('User_ID').setValue(this.selectedUserName);
+    this.updateUserForm.get('Task_ID').setValue(this.selectedTaskID);
   }
 
   selectTask(task:ITask):void{
     this.selectedTaskID=task.Task_ID;
     this.selectedTaskName=task.Task1;
     this.editForm.get('Parent_ID').setValue(this.selectedTaskID);
+    localStorage.removeItem('parenttaskid');
+    localStorage.setItem('parenttaskid',task.Task_ID.toString());    
   }
 
   onCancel(): void {
