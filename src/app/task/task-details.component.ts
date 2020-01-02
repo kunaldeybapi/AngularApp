@@ -8,6 +8,7 @@ import { UserService } from '../user/user.service';
 import { IUser } from '../user/user';
 import { IProject } from '../project/project';
 import { ProjectService } from '../project/project.service';
+import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -19,20 +20,21 @@ export class TaskDetailsComponent implements OnInit {
   errorMessage: string = '';
   task: ITask | undefined;
   editForm: FormGroup;
-  updateUserForm:FormGroup;
+  updateUserForm: FormGroup;
   display: string;
   selectedSearch: string;
   users: IUser[];
   filterUsers: IUser[];
   selectedUserID: number;
   selectedUserName: string;
-  selectedTaskID:number;
-  selectedTaskName:string;
+  selectedTaskID: number;
+  selectedTaskName: string;
   projects: IProject[];
   projectID: number;
-  parentTaskID:number;
-  tasks:ITask[];
+  parentTaskID: number;
+  tasks: ITask[];
   filterTasks: ITask[];
+  currentTaskID: number;
 
   constructor(private route: ActivatedRoute,
     private router: Router, private taskservice: TaskService, private projectService: ProjectService, private userService: UserService, private formBuilder: FormBuilder) { }
@@ -50,8 +52,8 @@ export class TaskDetailsComponent implements OnInit {
       User_ID: ['']
     });
 
-    this.updateUserForm=this.formBuilder.group({
-      Task_ID:['']
+    this.updateUserForm = this.formBuilder.group({
+      Task_ID: ['']
     });
 
     const param = this.route.snapshot.paramMap.get('id');
@@ -92,12 +94,12 @@ export class TaskDetailsComponent implements OnInit {
     return this.users.filter((users: IUser) => users.FirstName.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
-  
-  private _taskNameFilter : string;
-  public get taskNameFilter() : string {
+
+  private _taskNameFilter: string;
+  public get taskNameFilter(): string {
     return this._taskNameFilter;
   }
-  public set taskNameFilter(v : string) {
+  public set taskNameFilter(v: string) {
     this._taskNameFilter = v;
     this.filterTasks = this._taskNameFilter ? this.performTaskNameFilter(this._taskNameFilter) : this.tasks;
   }
@@ -111,7 +113,14 @@ export class TaskDetailsComponent implements OnInit {
     this.taskservice.getTaskDetail(id).subscribe(
       data => {
         this.editForm.get('Task_ID').setValue(data.Task_ID);
+
+        localStorage.removeItem("currentTaskID");
+        localStorage.setItem("currentTaskID", data.Task_ID.toString());
+
         this.editForm.get('Task1').setValue(data.Task1);
+        this.editForm.get('Priority').setValue(data.Priority);
+        this.editForm.get('Start_Date').setValue(data.Start_Date);
+        this.editForm.get('End_Date').setValue(data.End_Date);
 
         this.editForm.get('Project_ID').setValue(data.Project_ID);
         localStorage.removeItem("projectid");
@@ -119,49 +128,44 @@ export class TaskDetailsComponent implements OnInit {
         this.projectID = +localStorage.getItem('projectid');
         this.getProjectName(this.projectID);
 
-        this.editForm.get('Priority').setValue(data.Priority);
-
         this.editForm.get('Parent_ID').setValue(data.Parent_ID);
         localStorage.removeItem("parenttaskid");
         localStorage.setItem("parenttaskid", data.Parent_ID.toString());
         this.parentTaskID = +localStorage.getItem('parenttaskid');
         this.getParentTaskname(this.parentTaskID);
-
-        this.editForm.get('Start_Date').setValue(data.Start_Date);
-        this.editForm.get('End_Date').setValue(data.End_Date);
       });
   }
 
   onSubmit() {
     this.editForm.get('Project_ID').setValue(localStorage.getItem('projectid'));
-    this.parentTaskID=+localStorage.getItem('parenttaskid');
+    this.parentTaskID = +localStorage.getItem('parenttaskid');
     this.editForm.get('Parent_ID').setValue(this.parentTaskID);
 
     const taskName = this.editForm.get('Task1').value;
     const startDate = this.editForm.get('Start_Date').value;
     const endDate = this.editForm.get('End_Date').value;
 
-    if(taskName=="" || taskName==null){
+    if (taskName == "" || taskName == null) {
       alert('Task Name cannot be blank!');
     }
-    else if(startDate > endDate){
+    else if (startDate > endDate) {
       alert('End date cannot be before Start date!');
     }
-    else{
+    else {
       this.taskservice.updateTask(this.editForm.get('Task_ID').value, this.editForm.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          this.router.navigate(['/tasks']);
-        },
-        error => {
-          alert(error);
-        });
+        .pipe(first())
+        .subscribe(
+          data => {
+            this.router.navigate(['/tasks']);
+          },
+          error => {
+            alert(error);
+          });
 
-        this.userService.updateUserTask(this.selectedUserID,this.updateUserForm.value).subscribe(data => {
-          this.router.navigate(['/tasks']);
-        });;
-    }    
+      this.userService.updateUserTask(this.selectedUserID, this.updateUserForm.value).subscribe(data => {
+        this.router.navigate(['/tasks']);
+      });;
+    }
   }
 
   openModalDialog(searchFilter: string) {
@@ -197,15 +201,18 @@ export class TaskDetailsComponent implements OnInit {
     this.selectedUserID = user.User_ID;
     this.selectedUserName = user.FirstName + " " + user.LastName;
     this.editForm.get('User_ID').setValue(this.selectedUserName);
-    this.updateUserForm.get('Task_ID').setValue(this.selectedTaskID);
+
+    this.currentTaskID = +localStorage.getItem('currentTaskID');
+    this.updateUserForm.get('Task_ID').setValue(this.currentTaskID);
+    console.log(this.updateUserForm.value);
   }
 
-  selectTask(task:ITask):void{
-    this.selectedTaskID=task.Task_ID;
-    this.selectedTaskName=task.Task1;
+  selectTask(task: ITask): void {
+    this.selectedTaskID = task.Task_ID;
+    this.selectedTaskName = task.Task1;
     this.editForm.get('Parent_ID').setValue(this.selectedTaskID);
     localStorage.removeItem('parenttaskid');
-    localStorage.setItem('parenttaskid',task.Task_ID.toString());
+    localStorage.setItem('parenttaskid', task.Task_ID.toString());
   }
 
   onCancel(): void {
