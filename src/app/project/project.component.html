@@ -73,24 +73,27 @@
                 <label>Project:</label>
                 {{project.Project1}}
               </li>
-              <li class="list-group-item">
-                <label>Start Date:</label>
-                {{(project.Start_Date == null || project.Start_Date == "")? "No Start Date is set for this project.": project.Start_Date}}
+              <li class="list-group-item"><label>Start
+                  Date:</label>{{(project.Start_Date == null || project.Start_Date == "")? "No Start Date is set for this project.": project.Start_Date}}
               </li>
-              <li class="list-group-item">
-                <label>End Date:</label>
-                {{(project.End_Date == null || project.End_Date == "")? "No End Date is set for this project.": project.End_Date}}
+              <li class="list-group-item"><label>End
+                  Date:</label>{{(project.End_Date == null || project.End_Date == "")? "No End Date is set for this project.": project.End_Date}}
               </li>
               <li class="list-group-item">
                 <label>No. of Tasks:</label>
+                {{project.TaskCount}}
+              </li>
+              <li class="list-group-item">
+                <label>No. of Completed Tasks:</label>
+                {{project.CompletedTaskCount}}
               </li>
               <li class="list-group-item">
                 <label>Priority:</label>
                 {{project.Priority}}
               </li>
               <li class="list-group-item">
-                <label>Completed:</label>
-                {{(project.Status == false)?"In-progress":"Completed"}}
+                <label>Project Status:</label>
+                {{(project.Status == false)?"No : In-progress":"Suspended"}}
               </li>
             </ul>
           </td>

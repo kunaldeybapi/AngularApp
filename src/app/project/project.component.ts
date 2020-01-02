@@ -7,6 +7,8 @@ import { UserService } from '../user/user.service';
 import { IUser } from '../user/user';
 import { IProject } from './project';
 import { IParentTask } from '../task/parentTask';
+import { ITask } from '../task/task';
+import { TaskService } from '../task/task.service';
 
 @Component({
   selector: 'app-project',
@@ -26,18 +28,27 @@ export class ProjectComponent implements OnInit {
   selectedUserName: string;
   projects: IProject[];
   filterProjects: IProject[];
+  tasks: ITask[];
+  taskCount: number;
+  completedTaskCount:number;
 
-  constructor(private router: Router, private projectService: ProjectService, private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private taskService: TaskService, private projectService: ProjectService, private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.taskService.getTasks().subscribe({
+      next: data => {
+        this.tasks = data;
+      }
+    });
+
     this.projectService.getProjects().subscribe({
       next: projects => {
         this.projects = projects;
         this.filterProjects = this.projects;
+        this.getTaskCount();
       },
       error: err => (this.errorMessage = err)
     });
-
 
     this.addProjectForm = this.formBuilder.group({
       enableDates: [''],
@@ -45,8 +56,25 @@ export class ProjectComponent implements OnInit {
       Start_Date: ['', Validators.required],
       End_Date: ['', Validators.required],
       Priority: ['0', Validators.required],
-      Manager: ['', Validators.required]
+      Manager: ['', Validators.required],
     });
+  }
+
+  getTaskCount() {
+    for (let i = 0; i < this.projects.length; i++) {
+      this.taskCount = 0;
+      this.completedTaskCount=0;
+      for (let j = 0; j < this.tasks.length; j++) {
+        if (this.projects[i].Project_ID == this.tasks[j].Project_ID) {
+          this.taskCount++;
+          if(this.tasks[j].isTaskComplete == true){
+            this.completedTaskCount++;
+          }
+        }
+      }
+      this.projects[i].TaskCount = this.taskCount;
+      this.projects[i].CompletedTaskCount=this.completedTaskCount;
+    }
   }
 
   private _userNameFilter: string;
@@ -144,9 +172,6 @@ export class ProjectComponent implements OnInit {
   }
 
   sortProjectData() {
-  }
-
-  editProject() {
   }
 
   completeProject(id: number) {
