@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-8">
     <form [formGroup]="addUserForm" (ngSubmit)="onSubmit()">                  
       <div class="form-group">
         <label for="FirstName">First Name:</label>
@@ -33,9 +33,9 @@
               </tr>                                
           </thead>
           <tbody *ngFor='let user of filterUsers'>
-            <tr><td>{{user.FirstName}}</td><td><button class="btn btn-default" (click)="editUser(user.User_ID)">Edit</button></td></tr>
-            <tr><td>{{user.LastName}}</td><td><button class="btn btn-default" (click)="deleteUser(user)">Delete</button></td></tr>
-            <tr><td>{{user.Employee_ID}}</td></tr>
+            <tr><td colspan="4">{{user.FirstName}}</td><td><button class="btn btn-default" (click)="editUser(user.User_ID)">Edit</button></td></tr>
+            <tr><td td colspan="4">{{user.LastName}}</td><td><button class="btn btn-default" (click)="deleteUser(user)">Delete</button></td></tr>
+            <tr><td colspan="4">{{user.Employee_ID}}</td></tr>
             <tr><br></tr>          
           </tbody>
       </table>
