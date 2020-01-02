@@ -21,7 +21,6 @@ export class ProjectComponent implements OnInit {
   date: Date;
   datesDisabled: boolean = true;
   errorMessage: string = '';
-  addProjectForm: FormGroup;
   filterUsers: IUser[];
   users: IUser[] = [];
   selectedUserID: number;
@@ -31,6 +30,11 @@ export class ProjectComponent implements OnInit {
   tasks: ITask[];
   taskCount: number;
   completedTaskCount: number;
+  selectedProjectID: number;
+
+  updateUserForm:FormGroup;
+  addProjectForm: FormGroup;
+  
 
   constructor(private router: Router, private taskService: TaskService, private projectService: ProjectService, private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
 
@@ -56,7 +60,11 @@ export class ProjectComponent implements OnInit {
       Start_Date: ['', Validators.required],
       End_Date: ['', Validators.required],
       Priority: ['0', Validators.required],
-      Manager: ['', Validators.required],
+      Manager: [''],
+    });
+
+    this.updateUserForm=this.formBuilder.group({
+      Project_ID:['']
     });
   }
 
@@ -115,6 +123,20 @@ export class ProjectComponent implements OnInit {
         this.projectService.createProject(this.addProjectForm.value).subscribe(data => {
           window.location.reload();
         });
+      }
+      if (action == "update") {
+        
+        this.projectService.updateProject(this.selectedProjectID, this.addProjectForm.value).subscribe(data => {
+          console.log(data);
+          window.location.reload();
+        });
+
+        if (this.selectedProjectID && this.selectedUserID) {
+          this.updateUserForm.controls['Project_ID'].setValue(this.selectedProjectID);
+          this.userService.updateUserProject(this.selectedUserID,this.updateUserForm.value).subscribe(data => {
+            window.location.reload();
+          });
+        }
       }
     }
   }
@@ -233,19 +255,23 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  updateProject(id:number) {
+  loadDataforUpdate(id: number) {    
     this.projectService.getProjectDetail(id).subscribe(
-      data=>{
+      data => {
         this.addProjectForm.controls['Project1'].setValue(data.Project1);
         this.addProjectForm.controls['Start_Date'].setValue(data.Start_Date);
         this.addProjectForm.controls['End_Date'].setValue(data.End_Date);
         this.addProjectForm.controls['Priority'].setValue(data.Priority);
         document.getElementById('Start_Date').removeAttribute('disabled');
         document.getElementById('End_Date').removeAttribute('disabled');
-        document.getElementById('enableDates').setAttribute('disabled', 'true');       
+        document.getElementById('enableDates').setAttribute('disabled', 'true');
+        document.getElementById('AddorUpdate').innerHTML = "Update";
+        this.selectedProjectID = id;
       }
     );
   }
+
+
 
   Reset(): void {
     window.location.reload();
