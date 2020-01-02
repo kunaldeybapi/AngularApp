@@ -171,7 +171,59 @@ export class ProjectComponent implements OnInit {
     this.display = 'none'; //set none css after close dialog
   }
 
-  sortProjectData() {
+  sortProjectData(sortValue: string): void {
+    if (sortValue === 'startDate') {
+      this.projects.sort(this.sortByStartDate);
+    }
+    else if (sortValue === 'endDate') {
+      this.projects.sort(this.sortByEndDate);
+    }
+    else if (sortValue === 'priority') {
+      this.projects.sort(this.sortByPriority);
+    }
+    else if (sortValue === 'status') {
+      this.projects.sort(this.sortByTaskCompletion);
+    }    
+  }
+
+  sortByStartDate(a:IProject,b:IProject){
+    if (a.Start_Date < b.End_Date) {
+      return -1;
+    } else if (a.Start_Date > b.End_Date) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  sortByEndDate(a:IProject,b:IProject){
+    if (a.End_Date < b.End_Date) {
+      return -1;
+    } else if (a.End_Date > b.End_Date) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  sortByPriority(a:IProject,b:IProject){
+    if (a.Priority < b.Priority) {
+      return -1;
+    } else if (a.Priority > b.Priority) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  sortByTaskCompletion(a:IProject,b:IProject){
+    if (a.CompletedTaskCount < b.CompletedTaskCount) {
+      return -1;
+    } else if (a.CompletedTaskCount > b.CompletedTaskCount) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   completeProject(id: number) {
