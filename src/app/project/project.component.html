@@ -90,13 +90,13 @@
               <li class="list-group-item">
                 <label>Priority:</label>
                 {{project.Priority}}
-              </li>              
+              </li>
             </ul>
           </td>
           <td>
             <ul class="list-group">
               <li class="list-group-item">
-                <button class="btn btn-default" (click)="updateProject(project)">Update</button>
+                <button class="btn btn-default" (click)="updateProject(project.Project_ID)">Update</button>
               </li>
               <li class="list-group-item">
                 <button class="btn btn-default" (click)="completeProject(project.Project_ID)">Suspend</button>

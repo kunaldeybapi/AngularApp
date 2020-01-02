@@ -30,7 +30,7 @@ export class ProjectComponent implements OnInit {
   filterProjects: IProject[];
   tasks: ITask[];
   taskCount: number;
-  completedTaskCount:number;
+  completedTaskCount: number;
 
   constructor(private router: Router, private taskService: TaskService, private projectService: ProjectService, private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
 
@@ -63,17 +63,17 @@ export class ProjectComponent implements OnInit {
   getTaskCount() {
     for (let i = 0; i < this.projects.length; i++) {
       this.taskCount = 0;
-      this.completedTaskCount=0;
+      this.completedTaskCount = 0;
       for (let j = 0; j < this.tasks.length; j++) {
         if (this.projects[i].Project_ID == this.tasks[j].Project_ID) {
           this.taskCount++;
-          if(this.tasks[j].isTaskComplete == true){
+          if (this.tasks[j].isTaskComplete == true) {
             this.completedTaskCount++;
           }
         }
       }
       this.projects[i].TaskCount = this.taskCount;
-      this.projects[i].CompletedTaskCount=this.completedTaskCount;
+      this.projects[i].CompletedTaskCount = this.completedTaskCount;
     }
   }
 
@@ -183,10 +183,10 @@ export class ProjectComponent implements OnInit {
     }
     else if (sortValue === 'status') {
       this.projects.sort(this.sortByTaskCompletion);
-    }    
+    }
   }
 
-  sortByStartDate(a:IProject,b:IProject){
+  sortByStartDate(a: IProject, b: IProject) {
     if (a.Start_Date < b.End_Date) {
       return -1;
     } else if (a.Start_Date > b.End_Date) {
@@ -196,7 +196,7 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  sortByEndDate(a:IProject,b:IProject){
+  sortByEndDate(a: IProject, b: IProject) {
     if (a.End_Date < b.End_Date) {
       return -1;
     } else if (a.End_Date > b.End_Date) {
@@ -206,7 +206,7 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  sortByPriority(a:IProject,b:IProject){
+  sortByPriority(a: IProject, b: IProject) {
     if (a.Priority < b.Priority) {
       return -1;
     } else if (a.Priority > b.Priority) {
@@ -216,7 +216,7 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  sortByTaskCompletion(a:IProject,b:IProject){
+  sortByTaskCompletion(a: IProject, b: IProject) {
     if (a.CompletedTaskCount < b.CompletedTaskCount) {
       return -1;
     } else if (a.CompletedTaskCount > b.CompletedTaskCount) {
@@ -233,8 +233,18 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  updateProject(project: IProject) {
-
+  updateProject(id:number) {
+    this.projectService.getProjectDetail(id).subscribe(
+      data=>{
+        this.addProjectForm.controls['Project1'].setValue(data.Project1);
+        this.addProjectForm.controls['Start_Date'].setValue(data.Start_Date);
+        this.addProjectForm.controls['End_Date'].setValue(data.End_Date);
+        this.addProjectForm.controls['Priority'].setValue(data.Priority);
+        document.getElementById('Start_Date').removeAttribute('disabled');
+        document.getElementById('End_Date').removeAttribute('disabled');
+        document.getElementById('enableDates').setAttribute('disabled', 'true');       
+      }
+    );
   }
 
   Reset(): void {
