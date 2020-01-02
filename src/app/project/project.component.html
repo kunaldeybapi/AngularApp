@@ -1,4 +1,4 @@
-<div class="col-md-6">
+<div class="col-md-8">
   <form [formGroup]="addProjectForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <ul>
@@ -32,7 +32,7 @@
         <li style="list-style-type: none;"><input type="text" disabled formControlName="Manager" placeholder=""
             class="form-control" id="Manager"><br></li>
         <li style="list-style-type:none;">
-          <button type="button" class="btn btn-default" (click)="openModalDialog()">Search</button>          
+          <button type="button" class="btn btn-default" (click)="openModalDialog()">Search</button>
         </li>
         <li style="list-style-type:none;"><br></li>
         <li style="list-style-type: none;">
@@ -49,6 +49,51 @@
     </ul>
   </div>
   <br>
+  <div class="table-responsive">
+    <table class="table table-bordered" *ngIf='projects'>
+      <thead>
+        <tr>
+          <th colspan="5">
+            <input type="text" placeholder="Search" [(ngModel)]='projectNameFilter' style="width: 100%">
+          </th>
+        </tr>
+        <tr>
+          <th>Sort By:</th>
+          <th><button class="btn btn-default" (click)="sortProjectData('startDate')">Start Date</button></th>
+          <th><button class="btn btn-default" (click)="sortProjectData('endDate')">End Date</button></th>
+          <th><button class="btn btn-default" (click)="sortProjectData('priority')">Priority</button></th>
+          <th><button class="btn btn-default" (click)="sortProjectData('status')">Completed</button></th>
+        </tr>
+      </thead>
+      <tbody *ngFor='let project of filterProjects'>
+        <!-- <tr>
+          <td>{{project.Project1}}</td>
+          <td><button class="btn btn-default" (click)="editProject(project.Project_ID)">Update</button></td>
+        </tr>
+        <tr>
+          <td>{{project.Start_Date}}</td>
+          <td><button class="btn btn-default" (click)="completeProject(project)">Suspend</button></td>
+        </tr>
+        <tr>
+          <td>{{project.End_Date}}</td>
+        </tr> -->
+        <ul class="list-group">
+          <li class="list-group-item">
+            <label>Project:</label>
+            {{project.Project1}}
+          </li>
+          <li class="list-group-item">
+            <label>Start Date:</label>
+            {{(project.Start_Date == null || project.Start_Date == "")? "No Start Date set for this project.": project.Start_Date}}
+          </li>
+          <li class="list-group-item">
+            <label>End Date:</label>
+            {{(project.End_Date == null || project.End_Date == "")? "No End Date set for this project.": project.End_Date}}
+          </li>
+        </ul>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- modal -->

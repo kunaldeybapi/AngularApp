@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { UserService } from '../user/user.service';
 import { IUser } from '../user/user';
+import { IProject } from './project';
+import { IParentTask } from '../task/parentTask';
 
 @Component({
   selector: 'app-project',
@@ -17,23 +19,34 @@ export class ProjectComponent implements OnInit {
   date: Date;
   datesDisabled: boolean = true;
   errorMessage: string = '';
-  addProjectForm: FormGroup;  
+  addProjectForm: FormGroup;
   filterUsers: IUser[];
   users: IUser[] = [];
   selectedUserID: number;
   selectedUserName: string;
+  projects: IProject[];
+  filterProjects: IProject[];
 
   constructor(private router: Router, private projectService: ProjectService, private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.projectService.getProjects().subscribe({
+      next: projects => {
+        this.projects = projects;
+        this.filterProjects = this.projects;
+      },
+      error: err => (this.errorMessage = err)
+    });
+
+
     this.addProjectForm = this.formBuilder.group({
       enableDates: [''],
       Project1: ['', Validators.required],
       Start_Date: ['', Validators.required],
       End_Date: ['', Validators.required],
       Priority: ['0', Validators.required],
-      Manager: ['', Validators.required]      
-    });    
+      Manager: ['', Validators.required]
+    });
   }
 
   private _userNameFilter: string;
@@ -44,6 +57,17 @@ export class ProjectComponent implements OnInit {
     this._userNameFilter = v;
     this.filterUsers = this._userNameFilter ? this.performUserNameFilter(this._userNameFilter) : this.users;
   }
+
+
+  private _projectNameFilter: string;
+  public get projectNameFilter(): string {
+    return this._projectNameFilter;
+  }
+  public set projectNameFilter(v: string) {
+    this._projectNameFilter = v;
+    this.filterProjects = this._projectNameFilter ? this.performProjectNameFilter(this._projectNameFilter) : this.projects;
+  }
+
 
   onSubmit(): void {
     const projectName = this.addProjectForm.get('Project1').value;
@@ -62,7 +86,7 @@ export class ProjectComponent implements OnInit {
       if (action == "add") {
         this.projectService.createProject(this.addProjectForm.value).subscribe(data => {
           window.location.reload();
-        });        
+        });
       }
     }
   }
@@ -104,14 +128,28 @@ export class ProjectComponent implements OnInit {
     return this.users.filter((users: IUser) => users.FirstName.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
+  performProjectNameFilter(filterBy: string): IProject[] {
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.projects.filter((projects: IProject) => projects.Project1.toLocaleLowerCase().indexOf(filterBy) !== -1);
+  }
+
   selectUser(user: IUser): void {
     this.selectedUserID = user.User_ID;
     this.selectedUserName = user.FirstName + ' ' + user.LastName;
-    this.addProjectForm.get('Manager').setValue(this.selectedUserName);    
+    this.addProjectForm.get('Manager').setValue(this.selectedUserName);
   }
 
   closeModalDialog() {
     this.display = 'none'; //set none css after close dialog
+  }
+
+  sortProjectData() {
+  }
+
+  editProject() {
+  }
+
+  completeProject() {
   }
 
   Reset(): void {
