@@ -15,3 +15,11 @@
     font-style: normal;
     font-size: 18px;
 }
+
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 250px;
+    overflow-y: auto;
+}

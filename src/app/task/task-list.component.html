@@ -1,11 +1,11 @@
 <div class="col-md-8">
-    <div class="card-body">        
+    <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered">
                 <tbody>
                     <tr>
                         <td><label for="Project">Project:</label></td>
-                        <td><input type="text" disabled id="Project"></td>                        
+                        <td><input type="text" disabled id="Project"></td>
                         <td><button type="button" class="btn btn-default"
                                 (click)="openModalDialog('projects')">Search</button></td>
                         <td><label for="SortTask">Sort Task By:</label></td>
@@ -15,12 +15,14 @@
                                 Date</button></td>
                         <td><button type="button" class="btn btn-default"
                                 (click)="sortTaskData('priority')">Priority</button></td>
-                        <td><button type="button" class="btn btn-default" (click)="sortTaskData('complete')">Completed</button></td>
+                        <td><button type="button" class="btn btn-default"
+                                (click)="sortTaskData('complete')">Completed</button></td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>    <div style="height: 30px;"></div>
+    </div>
+    <div style="height: 30px;"></div>
     <div class="table-responsive">
         <table class="table table-bordered" *ngIf='tasks && tasks.length'>
             <tbody *ngFor='let task of filterTasks'>
@@ -54,7 +56,7 @@
 <!-- modal -->
 <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
     <!-- modal-dialog -->
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" style="overflow-y: scroll; max-height:85%;  margin-top: 50px; margin-bottom:50px;" role="document">
         <!-- modal-content -->
         <div class="modal-content">
             <!-- modal-header -->
@@ -63,7 +65,7 @@
                         aria-hidden="true">&times;</span></button>
             </div>
             <!-- modal-body -->
-            <div class="modal-body">
+            <div class="modal-body" style="height: 250px;overflow-y: auto;">
                 <div class="table-responsive">
                     <table class="table table-bordered" *ngIf="selectedSearch==='projects'">
                         <thead>

@@ -60,7 +60,7 @@
 <!-- modal -->
 <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
   <!-- modal-dialog -->
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog" style="overflow-y: scroll; max-height:85%;  margin-top: 50px; margin-bottom:50px;" role="document" role="document">
     <!-- modal-content -->
     <div class="modal-content">
       <!-- modal-header -->
@@ -69,7 +69,7 @@
             aria-hidden="true">&times;</span></button>
       </div>
       <!-- modal-body -->
-      <div class="modal-body">
+      <div class="modal-body" style="height: 250px;overflow-y: auto;">
         <div class="table-responsive">
           <table class="table table-bordered" *ngIf="selectedSearch==='users'">
             <thead>
