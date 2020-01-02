@@ -66,31 +66,45 @@
         </tr>
       </thead>
       <tbody *ngFor='let project of filterProjects'>
-        <!-- <tr>
-          <td>{{project.Project1}}</td>
-          <td><button class="btn btn-default" (click)="editProject(project.Project_ID)">Update</button></td>
-        </tr>
         <tr>
-          <td>{{project.Start_Date}}</td>
-          <td><button class="btn btn-default" (click)="completeProject(project)">Suspend</button></td>
+          <td colspan="4">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <label>Project:</label>
+                {{project.Project1}}
+              </li>
+              <li class="list-group-item">
+                <label>Start Date:</label>
+                {{(project.Start_Date == null || project.Start_Date == "")? "No Start Date is set for this project.": project.Start_Date}}
+              </li>
+              <li class="list-group-item">
+                <label>End Date:</label>
+                {{(project.End_Date == null || project.End_Date == "")? "No End Date is set for this project.": project.End_Date}}
+              </li>
+              <li class="list-group-item">
+                <label>No. of Tasks:</label>
+              </li>
+              <li class="list-group-item">
+                <label>Priority:</label>
+                {{project.Priority}}
+              </li>
+              <li class="list-group-item">
+                <label>Completed:</label>
+                {{(project.Status == false)?"In-progress":"Completed"}}
+              </li>
+            </ul>
+          </td>
+          <td>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <button class="btn btn-default" (click)="updateProject(project)">Update</button>
+              </li>
+              <li class="list-group-item">
+                <button class="btn btn-default" (click)="completeProject(project.Project_ID)">Suspend</button>
+              </li>
+            </ul>
+          </td>
         </tr>
-        <tr>
-          <td>{{project.End_Date}}</td>
-        </tr> -->
-        <ul class="list-group">
-          <li class="list-group-item">
-            <label>Project:</label>
-            {{project.Project1}}
-          </li>
-          <li class="list-group-item">
-            <label>Start Date:</label>
-            {{(project.Start_Date == null || project.Start_Date == "")? "No Start Date set for this project.": project.Start_Date}}
-          </li>
-          <li class="list-group-item">
-            <label>End Date:</label>
-            {{(project.End_Date == null || project.End_Date == "")? "No End Date set for this project.": project.End_Date}}
-          </li>
-        </ul>
       </tbody>
     </table>
   </div>

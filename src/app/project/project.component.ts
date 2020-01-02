@@ -149,7 +149,15 @@ export class ProjectComponent implements OnInit {
   editProject() {
   }
 
-  completeProject() {
+  completeProject(id: number) {
+    this.projectService.completeProject(id).subscribe(data => {
+      console.log('Selected Project ID: ' + id);
+      window.location.reload();
+    });
+  }
+
+  updateProject(project: IProject) {
+
   }
 
   Reset(): void {

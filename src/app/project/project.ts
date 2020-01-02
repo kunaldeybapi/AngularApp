@@ -4,4 +4,5 @@ export interface IProject{
     Start_Date:string;
     End_Date:string;
     Priority:number;
+    Status:boolean;
 }
